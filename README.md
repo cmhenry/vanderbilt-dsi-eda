@@ -39,10 +39,8 @@ Begin with package-provided data in the missing-data lesson, the [flow-diagram l
 
 This is a curated teaching archive, not a current course offering or a complete executable distribution of the 2022 course. It excludes student survey responses, instructor keys, unverified data copies, and private Git history. Links to class signup sheets and the class survey form have been removed. Historical dates and submission instructions in retained handouts describe the original classroom context, not current deadlines.
 
-The syllabus is reconstructed, not the original institutional syllabus. No overall grading weights, office hours, or institutional policies have been invented. **[Provenance and editorial notes](docs/PROVENANCE.md)** distinguish original material from this edition's additions and identify gaps in the surviving module sequence.
-
 ## Credit and reuse
 
-Course materials: Cassy Dorff and the DSI-EDA-2022 contributors, including Colin Henry and the contributor identified as [MyrandaGoesToSpace](https://github.com/MyrandaGoesToSpace) in the environmental-mapping lesson's source history. Additional acknowledgments within individual lessons are retained.
+Course materials: Cassy Dorff and Colin Henry.
 
 The original **[MIT license](LICENSE)** applies to the course code and documentation as provided by the source repositories. Third-party datasets and quoted material retain their own terms; see [data attribution](docs/DATA_AND_REUSE.md). The new syllabus, navigation, and editorial documentation are provided under MIT as well. This is a personal teaching portfolio, not an official Vanderbilt publication.
