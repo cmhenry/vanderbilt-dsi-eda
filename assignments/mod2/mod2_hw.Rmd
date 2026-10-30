@@ -1,0 +1,61 @@
+---
+title: "Week 2 homework assignment"
+author: Student Name
+date: Due Date
+output: github_document
+editor_options:
+  chunk_output_type: inline
+---
+
+## DSI-EDA
+## Professor Cassy Dorff
+*(Due Date: Wednesday before class, 11: 59pm CST)*
+To submit this assignment, knit it to github flavored markdown and submit all your work on GitHub.
+
+
+```{r, include=FALSE}
+library(rmarkdown)
+library(tidyverse)
+library(datasets)
+```
+
+## Homework Assignment
+
+### Section 1
+
+Review "mod2_key.rmd" which is our lecture notes from mod 2. 
+
+- On your own: Review the code with two things in mind. (1) use `data.frame()` to create a  `data.frame` object and practice subsetting again if this section was new to you. (2) Run the last few lines of code in the .Rmd (line 211+) to checkout how to examine the relationship between two variables visually. Then, answer the following question:
+
+- According to the plot, which "origin airport" has the highest mean arrival delays?
+
+
+### Section 2
+
+Let's practice what we've learned about summarizing data so far. We're going to be working with one of R's built-in datasets. These data are included with the base installation of R for learning purposes. Loading the library `datasets` makes 30+ data objects available to your R session. Today's dataset is named `UCBAdmissions` and provides data on student admissions to University of California, Berkeley.
+
+*Question 1*:  Show below how to investigate the data. 
+
+```{r}
+
+```
+
+
+Then, in at least 3 complete sentences, describe the "basics" of the data. Recall from lecture, "step 1" of summarizing data.
+
+*Question 2*: Below, create a sum of the number of applicants by department and save the output as a new data object. Then, sum the number of applicants by department and save the output as a new data frame and/or tibble object. Make sure your code shows you know how to check what kind of object you've created for `sum_df`.
+
+```{r}
+#sum_dt <-
+
+#sum_df <-
+```
+
+
+*Question 3*: Using any method, find the average department admittance rate for observations with `Female` in the gender column.
+
+*Question 4*: What would be another interesting relationship between two variables to examine? First, write this answer in a complete sentence. Then try to explore it via code on your own. 
+
+```{r}
+
+```

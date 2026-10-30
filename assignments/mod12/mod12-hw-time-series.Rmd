@@ -1,0 +1,333 @@
+---
+title: "Mod 12: Time Series Data"
+professor: "Dr. Cassy Dorff"
+output:
+  html_document:
+    keep_md: true
+urlcolor: blue
+subtitle: DSI-Explore
+editor_options: 
+  chunk_output_type: console
+---
+
+## Introduction
+
+Today we will focus on time series data. Time series data consists of any metric that is measured over regular time *intervals.* Examples: Weather data, Local Crime Statistics, Stock prices, Industry forecasts, Number of Protests Events.
+
+Note: you could take an entire course on time series data and modeling! This is only an introduction, but it will plant the seeds for future learning on the topic and help you understand why 'accounting for time' even if visually, is important. To begin, let's explore the ever-intuitive line-plot using familiar data.
+
+## Line plots
+
+Line plots are particularly useful for time series data. We will continue working with the `gapminder` data.  
+
+```{r, warning = F, fig.height = 2, fig.width = 4}
+library(gapminder)
+library(ggplot2)
+str(gapminder)
+df <- gapminder
+```
+
+To begin, let's say we wanted to know a bit more about GDP development in China. Below, we will graph the GDP per capita development of China from 1952 to 2007. We select the data for China by using the `subset()` function on the original data frame.
+
+```{r}
+ggplot(subset(df, country %in% c("China")),
+       aes(x = year,
+           y = gdpPercap)) +
+  geom_line(alpha = 0.5) +
+  theme_light() +
+  labs(title = "GDP per capita of China",
+       x = "Year",
+       y = "GDP per capita") +
+  scale_x_continuous(breaks = seq(1950,2000, 25))
+```
+
+We can add points to the line to highlight which observations are available in the underlying data.
+
+```{r, warning = F, fig.height = 2, fig.width = 4}
+ggplot(subset(df, country %in% c("China")),
+       aes(x = year,
+           y = gdpPercap)) +
+  geom_line(alpha = 0.5) +
+  geom_point(alpha = 0.8,
+             size = 0.4) +
+  theme_light() +
+  labs(title = "GDP per capita of China",
+       x = "Year",
+       y = "GDP per capita") +
+  scale_x_continuous(breaks = seq(1950,2000, 25))
+```
+
+China and India both have very large populations that have grown rapidly over the last few decades. What if we wanted to also check out whether a similar trend exists for India? 
+
+```{r}
+ggplot(subset(df, country %in% c("China", "India")),
+       aes(x = year,
+           y = gdpPercap)) +
+  geom_line(aes(color=country), alpha = 0.5) +
+  geom_point(alpha = 0.8,
+             size = 0.4) +
+  theme_light() +
+  labs(title = "GDP per capita of China and India",
+       x = "Year",
+       y = "GDP per capita") +
+  scale_x_continuous(breaks = seq(1950,2000, 25))
+```
+
+
+
+*Practice 1 - HW on your own*
+
+Now that we are exploring comparisons, let's compare the data across multiple countries overtime. 
+
+Go ahead and make a plot to compare the GDP per capita development of the BRICS countries (Brazil, Russia, India, China, South Africa; these have been coined as five major emerging national economies). Unfortunately, Russia is not part of the `gapminder` data, so we cannot display it in the plot.
+
+On your own please create a publication-ready graph that can be printed using grayscale. Keep in mind you should distinguish the different lines easily from one another.
+
+```{r, warning = F, fig.height = 2, fig.width = 5, echo = TRUE, message = F}
+
+
+
+
+```
+
+In cases like this, we might want to facet the plot by a single variable, using `facet_wrap()`. The first argument of `facet_wrap()` should be a formula, which you create with `~` followed by a variable name (here "formula" is the name of a data structure in R, not a synonym for "equation"). The variable that you pass to `facet_wrap()` should be discrete. Below, we can use facet wrap ~ country to inspect trends across groupings.
+
+
+```{r, warning = F, fig.height = 2, fig.width = 7, echo = TRUE, message = F}
+
+
+
+```
+
+Which plot do you like better? Facet wrap, or everything on the same graph? What are the pros and cons?
+
+*Practice 2 - HW on your own*
+We may also want to look at how population in BRICS countries changed over time. Try to produce a similar graph for population but use `facet_grid()` instead of `facet_wrap()`. You might want to check the help file for `facet_grid()` because there is a tiny difference between the two. 
+
+Hint: consider adding `scale_y_continuous(breaks=seq(0, 1500000000, 300000000)` and changing `labels = function(x){paste0(x/1000000, ' million')})` to control the labels of your Y axis.
+
+```{r}
+# students:
+ggplot(subset(df, country %in% c("Brazil", "Russia", "China", "India", "South Africa")),
+       aes(x = year,
+           y = pop)) +
+  geom_line(alpha = 0.5) +
+  geom_point(alpha = 0.8,
+             size = 0.4) +
+  theme_light() +
+  labs(title = "Population in BRICS countries",
+       x = "Year",
+       y = "Population") +
+  facet_grid(rows = vars(country))+ 
+  scale_x_continuous(breaks = seq(1950,2000, 25)) + scale_y_continuous(
+            breaks=seq(0, 1500000000, 300000000), 
+            labels = function(x){paste0(x/1000000, ' million')})
+
+
+```
+
+### Spaghetti plots
+
+Spaghetti plots are line plots with many lines displayed in a plot. Typically, the lines are very thin and/or have a high level of transparency to show trends in the data. Below, we graph the evolution of life expectancy for all countries in the data set. We allow each country to have its own line by using the `group()` parameter inside `aes()`. We will highlight one country in red. 
+
+```{r, warning = F, fig.height = 2.5, fig.width = 4, message = F}
+
+ggplot(df, aes(x = year,y = lifeExp, group = country)) +
+  geom_line(alpha = 0.2, size = 0.1) +
+  labs(title = "Life expectancy over time",
+       x = "Year",
+       y = "Life expectancy") +
+  theme_light() 
+
+
+```
+
+
+We can also display the temporal trend for select countries using color. Below, plot a spagetti plot similar to the one above, but this time highlight all four of the BRIC countries. Then we highlight BRICS countries. BRICS is an acronym for the economic bloc of countries consisting of Brazil, Russia, India, and China. In 2010, South Africa joined the BRIC group.BRICS is the acronym coined for an association of five major emerging national economies. Here is a good example of when and why you might use multiple layers of the same geom! 
+
+Note: How does scale_color_brewer work? How does it 'know' where to apply color?
+Note 2: Are you confused about this grouping argument in the aesthetic? [Check out this great post on it"] [https://ggplot2.tidyverse.org/reference/aes_group_order.html]
+
+
+```{r}
+brics <- c("Brazil", "Russia", "China", "India", "South Africa")
+ggplot(subset(df, !(country %in% brics)), aes(x = year,y = lifeExp, group = country)) +
+  geom_line(alpha = 0.2, size = 0.1) +
+  labs(title = "Life expectancy over time",
+       x = "Year",
+       y = "Life expectancy") +
+  theme_light()+
+  geom_line(data = subset(df, country %in% brics),aes(color = country), size = 0.5) +
+  scale_color_brewer(palette = "RdYlBu") 
+
+```
+
+In the plot below, we will use a log transformation on GDP per capita within the `scale_color_gradient()` function to display GDP per capita values on their original scale but map the color of the lines to the natural log of GDP per capita. Why is it useful to apply a log transformation here?  Use of log makes the non-linear growth function linear and more interpretable over time. We often do this with many time series variables  because many time series variables have overall trends of exponential growth.
+
+
+```{r, warning = F, message = F, fig.height = 3, fig.width = 8}
+ggplot(df,aes(x = year,y = lifeExp, group = country, color = gdpPercap)) +
+  # Setting up spaghetti plot
+  geom_line(alpha = 1, size = 0.1) +
+  # Each continent in a separate panel
+  facet_wrap(~continent, nrow = 1) +
+  
+  # Choosing default theme
+  theme_light() +
+  
+  # Adjusting default theme
+  theme(panel.background = element_rect(fill = "black"),
+        panel.grid = element_line(size = 0.1),
+        strip.background = element_rect(fill = "black"),
+        strip.text = element_text(color = "white")) +
+  # Making the colors pop
+  scale_color_gradient(low = "#f7ff00",
+                      high = "#00f7ff",
+                      name = "GDP per capita",
+                      trans = "log") +
+  
+  # Additional appearance adjustments
+  labs(x = "Year",
+       y = "Life expectancy",
+       title = "Global life expectancy") +
+  theme(legend.position = "bottom",
+        legend.key.width = unit(1.5, "cm")) +
+  scale_x_continuous(breaks = seq(1950, 2010, 25))
+```
+
+
+
+## Why time matters 
+
+Understanding time often tells us a lot about changes in trajectories across different cases in our data. Later in your education as a data scientist, you will also learn about the ways in which dimensions of the data correlate overtime.
+
+Let's consider the `eu_stocks` dataset (available in R by default as EuStockMarkets). This dataset contains daily closing prices of major European stock indices from 1991-1998, specifically, from Germany (DAX), Switzerland (SMI), France (CAC), and the UK (FTSE). The data were observed when the markets were open, so there are no observations on weekends and holidays. 
+
+```{r}
+#install.packages("datasets.load") #some might not have to do this
+library(tseries)
+library(forecast)
+data("EuStockMarkets")
+eu_stocks = EuStockMarkets
+```
+
+Below, explore the `ts()` and `is.ts()` function from the R stats package, as well as the help files that describe what a time series object is.
+
+Explore: What is the 'frequency' argument of a time series object? Comment these below. 
+
+```{r}
+is.ts(eu_stocks)
+start(eu_stocks)
+end(eu_stocks)
+frequency(eu_stocks)
+```
+
+We can tell from using the time-series function that this data is already a time-series object. The `ts()` function will convert a numeric vector into an R time series object. The format is `ts(vector, start=, end=, frequency=)` where `start` and `end` are the times of the first and last observation and frequency is the number of observations per unit time (1=annual, 4=quartly, 12=monthly, etc.).
+
+```{r}
+# R recognizes when the x argument is a ts object and actually calls the plot.ts() function under the hood
+plot(eu_stocks)
+
+ts.plot(eu_stocks, col = 1:4, xlab = "Year", ylab = "Index Value", main = "Major European Stock Indices, 1991-1998")
+legend("topleft", colnames(eu_stocks), lty = 1, col = 1:4, bty = "n")
+```
+
+To create a similar plot in ggplot we can use the handy `ggfortify`! `ggfortify` let `ggplot2` know how to interpret ts objects. After loading `ggfortify`, you can use ggplot2::autoplot function for `ts` objects.
+
+```{r}
+library(ggfortify)
+autoplot(eu_stocks) + theme_bw()
+```
+
+For more illustration:
+
+```{r}
+set.seed(123)
+# a sequence from 1 to 100 scaled up by 10 to avoid negatives +  some random normal noise 
+# rnorm syntax is rnorm(n, mean, sd). Default mean is zero. Default standard devation is 1. 
+t <- seq(from = 1, to = 100, by = 1) + 10 + rnorm(100, sd = 7)
+plot(t)
+```
+
+This could potentially represent some time series, with time represented along the x-axis. However, it’s hard to tell. The x-axis is simply an index from 1 to 100 in this case.
+
+A vector object such as t above can easily be converted to a time series object using the `ts()` function. Let’s assume our generated data is quarterly data that starts in the first quarter of 2000.
+
+```{r}
+tseries <- ts(t, start = c(2000, 1), frequency = 4)
+print(tseries)
+plot(tseries)
+```
+
+### What is a Stationary Time Series ?
+
+A time series is said to be *stationary* if it holds the following conditions true.
+
+1. The mean value of time-series is constant over time, which implies, the trend component is nullified.
+2. The variance does not increase over time.
+3. Seasonality effect is minimal.
+
+This means it is devoid of trend or seasonal patterns, which makes it looks like a random white noise irrespective of the observed time interval.
+
+Investigate the mean over time 
+```{r}
+# recall: 
+plot(eu_stocks)
+autoplot(eu_stocks)
+
+# mean over time
+plot(aggregate(eu_stocks,FUN=mean))
+```
+
+The mean values increase over time. We can see from this plot and the others that this data has an important time component. One way to investigate the role of time, early on, is to examine autocorrelation across different lags. 
+
+The *ACF* shows the correlation of a time series with lags of itself. That is, how much the time series is correlated with itself at one lags, two lags, 100 lags. The ACF can be used to identify the possible structure of time series data. The autocorrelation at lag zero is always one. This is because a series is always perfectly correlated with itself.
+
+(The *PACF* is a little more complex. The partial autocorrelation is the amount of correlation between a time series and lags of itself that is not explained by a previous lag. So the partial autocorrelation at lag two is the correlation between the series and its second lag that is not explained by the first lag.)
+
+Note, we see a yearly trend in the data, but that data is actually measured daily. The scale of the x axis on the ACF plot will relate directly to the scale of your data.
+
+```{r}
+#examples in exploring ts data
+
+#grab one column, check autocorrelation
+dax <- EuStockMarkets[, 1] 
+Acf(dax) 
+ggAcf(dax)
+
+# remove seasonality from data
+ftse=(EuStockMarkets[,4])
+plot(ftse)
+# decompose function splits or "decomposes" the time series data into parts using the additive method
+
+# Note decompose(data, type="mult") changes default to multiplicative method
+# Y = Season + Trend + Random Noise
+
+# the observed data, the trend moving or rolling average, the estimated seasonal trend/pattern the data follows
+# the remainder is considered random noise effected by "shocks" 
+components.ts = decompose(ftse) 
+plot(components.ts)
+
+# By subtracting the seasonal component from the original time series we can obtain a seasonally adjusted time series
+x = ftse- components.ts$seasonal
+plot(x)
+ftse_stationary <- diff(x, differences=1)
+plot(ftse_stationary)
+acf(ftse_stationary,lag.max = 40)
+```
+
+More on this, especially the math, for those interested:
+https://nwfsc-timeseries.github.io/atsa-labs/sec-tslab-correlation-within-and-among-time-series.html
+
+## References
+- Major thank you to Prof. Casey Dorff! 
+https://www.rdocumentation.org/packages/forecast/versions/8.9/vignettes/JSS2008.Rmd
+- https://machinelearningmastery.com/gentle-introduction-autocorrelation-partial-autocorrelation/
+- https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_ts.html
+-  https://github.com/thereseanders/workshop-dataviz-fsu
+- http://worldpopulationreview.com/countries/
+- http://r-statistics.co/Time-Series-Analysis-With-R.html
+- https://ntguardian.wordpress.com/2017/03/27/introduction-stock-market-data-r-1/
+- https://www.statmethods.net/advstats/timeseries.html
+- https://buildmedia.readthedocs.org/media/pdf/a-little-book-of-r-for-time-series/latest/a-little-book-of-r-for-time-series.pdf
+- https://datascienceplus.com/time-series-analysis-in-r-part-1-the-time-series-object/

@@ -1,0 +1,93 @@
+---
+title: "Midterm-EDA-2022"
+author: XXX
+output: github_document
+editor_options:
+  chunk_output_type: inline
+---
+
+# EDA Midterm 2022
+
+## Background: 
+
+- Read the document "midterm_data_doc.pdf" to learn about midterm_data_1.csv.
+- The data is in the same repository as this file. It is called "midterm_data_1.csv"
+- Later in the exam you will use a second dataset called "midterm_data_2.csv". There is no PDF for the second data.
+
+## Hard facts:
+
+- You have approximately 1 hour and 20 min: *Exam DUE AT 2:30 pm.* Note the extra five minutes! We reserve the right to deduct points for submissions later than this deadline.
+- This exam is open notes.
+- You cannot work with other students or be on any kind of chat service while taking the exam.
+- You *must* submit an .rmd file to your hw/assignments repo.
+- You *must* also knit to a github flavored markdown doc with figures included, and submit this too.
+- Yes you can use this file to write your exam in.
+- I recommend you take the exam in order from part 1 onward.
+
+## Part 1 (20 points)
+
+1.a Don't forget to load in the libraries you think you need for the exam (you can add more as you go if needed). Next, read in the data called "midterm_data_1.csv". Describe the data, in *detail*, using 2-3 complete sentences written outside and after the code chunk.
+
+1.b How much total missingness is there in the dataset? Second, how many variables have missingness? Show your work. (You are not required to make a visualization to answer this).
+
+```{r}
+# code here
+
+```
+
+
+##  Part 2 (20 points)
+
+2.a What is the distribution of the *severity* of accidents? How severe are most accidents? Make a visualization, with clear labels, to answer this question and write an answer using complete sentences following the code chunk. Then conclude with at least 1 sentence that justifies why you chose the visualization you did to answer the question.
+
+```{r}
+
+```
+
+
+2.b What kinds of weather conditions are the most frequently reported in the data? First, show (print) the top 10 most frequently reported weather conditions. Then interpret which weather conditions are the most 3 commonly reported using a complete sentence. (No visualization is required to answer this question, you can just interpret the output of your code). 
+
+
+```{r}
+
+
+```
+
+
+## Part 3: Explore the data on your own. (40 points)
+
+- Ask an exploratory question or two about the data and answer them with data visualizations.
+- At a minimum aim for two well developed, original, clearly labeled, different data visualizations (use two *different* graphical presentations of the data (don't make two histograms, for example) and do not exactly replicate any of the above visualizations). 
+- At a minimum, at least one visualization should graph at least two variables from the data.
+- Interpret your findings using complete sentences.
+
+## Part 4: Missing Data (20 points)
+
+Read in the data called "midterm_data_2.csv." Imagine this is a small survey sample of American's opinions about Halloween and candy where:
+
+- age = the age of the respondent
+- fave_cand = whether the person likes sour, sweet, or spicy candy.
+- usa = regions in the United States
+- hall_r = a rating from 0 to 10 about how much the person enjoys the Halloween holiday.
+
+```{r}
+
+
+```
+
+4.a Which variable in the dataset has the most missingness?
+
+```{r}
+
+
+```
+
+4.b Focus on the variable with the *most* missingness and inspect this variable's missingness in detail to provide evidence for whether or not you think the missingness is MCAR, MAR, or MNAR. Explain your answer in complete sentences and justify your position with at least two kinds of EDA evidence.
+
+```{r}
+
+
+```
+
+
+

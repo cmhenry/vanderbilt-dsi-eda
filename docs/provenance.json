@@ -1,0 +1,483 @@
+{
+  "edition": "Public teaching portfolio; not the original institutional syllabus",
+  "prepared_at_utc": "2026-10-30T21:12:28.741143+00:00",
+  "sources": [
+    {
+      "repository": "DSI-EDA-2022/EDA-class-code",
+      "branch": "main",
+      "commit": "40d3b2870cca682be0d921b2e6da195c48a4d8f9",
+      "working_tree_clean": true,
+      "tracked_file_count": 43,
+      "not_copied_paths": [
+        ".gitignore",
+        "LICENSE",
+        "README.md",
+        "mod10/day2-live-coding.Rmd",
+        "mod10/full-poetry-data.rds",
+        "mod10/subset-poetry-data.rds",
+        "mod12/mod12_instructor.rmd",
+        "mod13/kmeans_instructor.Rmd",
+        "mod15/CountyVote2004_2020.rds",
+        "mod15/FloridaCountyData.rds",
+        "mod15/Trumptweets.rds",
+        "mod2/mod2_key.Rmd",
+        "mod2/ncbreweries.rdata",
+        "mod3/metro-nash-schools.csv",
+        "mod3/mod3_day1_key.Rmd",
+        "mod3/mod3_day2_key.Rmd",
+        "mod3/ncbreweries.rdata",
+        "mod4/metro-nash-schools.csv",
+        "mod4/mod4_key.Rmd",
+        "mod5/mod5_lecture_key.Rmd",
+        "mod5/mod5_quickfire.md",
+        "mod5/quickfire_data.csv",
+        "mod6/EDA_2022_original_survey.csv",
+        "mod6/mod6_missing_data_key.Rmd",
+        "mod7/df.csv",
+        "mod7/mod7_missing_data_key.Rmd",
+        "mod8-midterm/midterm_data_1.csv",
+        "mod8-midterm/midterm_data_2.csv",
+        "mod8-midterm/midterm_data_doc.pdf"
+      ]
+    },
+    {
+      "repository": "DSI-EDA-2022/EDA-assignments",
+      "branch": "main",
+      "commit": "84932e65728ea1af0da4d3596c05c0f72f0578ea",
+      "working_tree_clean": true,
+      "tracked_file_count": 25,
+      "not_copied_paths": [
+        ".gitignore",
+        "LICENSE",
+        "README.md",
+        "mod10/emails.csv",
+        "mod10/examiner-date-text.csv",
+        "mod10/india-news-headlines.csv",
+        "mod10/jeopardy.csv",
+        "mod10/tweets.csv",
+        "mod13/covid.csv",
+        "mod15/EDA_2022_original_survey.csv",
+        "mod2/mod2_hw.md",
+        "mod4/election_2012.RData",
+        "mod5/mod5_hw.md",
+        "mod6/workout_data.csv"
+      ]
+    },
+    {
+      "repository": "DSI-EDA-2022/EDA-project-ex",
+      "branch": "main",
+      "commit": "2a61b5f550e3197a254bc55ffbad8bcef548a64e",
+      "working_tree_clean": true,
+      "tracked_file_count": 9,
+      "not_copied_paths": [
+        ".gitignore",
+        "1_preprocessing/analysis.R",
+        "2_data/data_clean/test 2.xlsx",
+        "2_data/data_raw/test.xlsx",
+        "3_main_findings/main_findings.R",
+        "4_deliverables/report.pdf",
+        "LICENSE",
+        "README.md",
+        "meeting_notes.md"
+      ]
+    }
+  ],
+  "imports": [
+    {
+      "source_repository": "DSI-EDA-2022/EDA-class-code",
+      "source_path": "mod2/mod2_students.Rmd",
+      "destination_path": "lessons/mod2/mod2_students.Rmd",
+      "source_status": "committed",
+      "source_sha256": "2f39affc366a8f27241f30fc28bc235641e8272165c0d85e7ca1810782f31483",
+      "destination_sha256": "2f39affc366a8f27241f30fc28bc235641e8272165c0d85e7ca1810782f31483",
+      "bytes": 9387,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-class-code",
+      "source_path": "mod3/mod3_day1_student.Rmd",
+      "destination_path": "lessons/mod3/mod3_day1_student.Rmd",
+      "source_status": "committed",
+      "source_sha256": "434c2d6890587cd331c198d52762fdb084f52639264111374fb467ddeda513a7",
+      "destination_sha256": "434c2d6890587cd331c198d52762fdb084f52639264111374fb467ddeda513a7",
+      "bytes": 1476,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-class-code",
+      "source_path": "mod3/mod3_day2_student.Rmd",
+      "destination_path": "lessons/mod3/mod3_day2_student.Rmd",
+      "source_status": "committed",
+      "source_sha256": "ba8960037f6db58adcaaf0e31d79a9b490fcd4998b99064d3a5ee3159d9d713d",
+      "destination_sha256": "ba8960037f6db58adcaaf0e31d79a9b490fcd4998b99064d3a5ee3159d9d713d",
+      "bytes": 5159,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-class-code",
+      "source_path": "mod4/mod4_student.Rmd",
+      "destination_path": "lessons/mod4/mod4_student.Rmd",
+      "source_status": "committed",
+      "source_sha256": "a9ad55e15a04da68dd0a9ad7c04bfd2a65cbd5a64c16ffb0b7ba3a59c83d600d",
+      "destination_sha256": "a9ad55e15a04da68dd0a9ad7c04bfd2a65cbd5a64c16ffb0b7ba3a59c83d600d",
+      "bytes": 10314,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-class-code",
+      "source_path": "mod5/mod5_lecture_students.Rmd",
+      "destination_path": "lessons/mod5/mod5_lecture_students.Rmd",
+      "source_status": "committed",
+      "source_sha256": "fb8b40284fac7d5b09a0e847d95f68b7c400bea193f38e803f5a7bd11499594a",
+      "destination_sha256": "fb8b40284fac7d5b09a0e847d95f68b7c400bea193f38e803f5a7bd11499594a",
+      "bytes": 8649,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-class-code",
+      "source_path": "mod6/mod6_missing_data_student.Rmd",
+      "destination_path": "lessons/mod6/mod6_missing_data_student.Rmd",
+      "source_status": "committed",
+      "source_sha256": "ee9e11df2c24ac28a8e5eb0605aac903e37cb781d7b0cbe39b3c5d2fdefbd189",
+      "destination_sha256": "ee9e11df2c24ac28a8e5eb0605aac903e37cb781d7b0cbe39b3c5d2fdefbd189",
+      "bytes": 5821,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-class-code",
+      "source_path": "mod10/day2-live-coding-student.Rmd",
+      "destination_path": "lessons/mod10/day2-live-coding-student.Rmd",
+      "source_status": "committed",
+      "source_sha256": "00a3dc6e6429a14d44c4ae7d110d238a1e2a05c191e0e63a065b4a49ab6dfe59",
+      "destination_sha256": "00a3dc6e6429a14d44c4ae7d110d238a1e2a05c191e0e63a065b4a49ab6dfe59",
+      "bytes": 6542,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-class-code",
+      "source_path": "mod11/mapping-ssta.Rmd",
+      "destination_path": "lessons/mod11/mapping-ssta.Rmd",
+      "source_status": "committed",
+      "source_sha256": "b6eb5602d53478835edd294fcbdcb0e4c70273e454b251d9484344419b09bccf",
+      "destination_sha256": "b6eb5602d53478835edd294fcbdcb0e4c70273e454b251d9484344419b09bccf",
+      "bytes": 11512,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-class-code",
+      "source_path": "mod12/mod12_spatial_student.Rmd",
+      "destination_path": "lessons/mod12/mod12_spatial_student.Rmd",
+      "source_status": "committed",
+      "source_sha256": "709a9d131dc7f51170f7756c7fa24415bdf21a624d2ad2e04069044f27c19f49",
+      "destination_sha256": "709a9d131dc7f51170f7756c7fa24415bdf21a624d2ad2e04069044f27c19f49",
+      "bytes": 12377,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-class-code",
+      "source_path": "mod13/mod13_student.Rmd",
+      "destination_path": "lessons/mod13/mod13_student.Rmd",
+      "source_status": "committed",
+      "source_sha256": "9a6190331532bb7da3da17ff18e49a2f583a74b933a064d66949b3475bb4f6d7",
+      "destination_sha256": "9a6190331532bb7da3da17ff18e49a2f583a74b933a064d66949b3475bb4f6d7",
+      "bytes": 11086,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-assignments",
+      "source_path": "mod1/week1_hw.md",
+      "destination_path": "assignments/mod1/week1_hw.md",
+      "source_status": "committed",
+      "source_sha256": "64cf517b2aa194569e4dc4970f9464a7378304e313a185af1525592732e4cf02",
+      "destination_sha256": "64cf517b2aa194569e4dc4970f9464a7378304e313a185af1525592732e4cf02",
+      "bytes": 982,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-assignments",
+      "source_path": "mod2/mod2_hw.Rmd",
+      "destination_path": "assignments/mod2/mod2_hw.Rmd",
+      "source_status": "committed",
+      "source_sha256": "fc2c9d03a13d3a9431176b109b0f3acd2c102837462663f8b1e02f9819bd4efa",
+      "destination_sha256": "fc2c9d03a13d3a9431176b109b0f3acd2c102837462663f8b1e02f9819bd4efa",
+      "bytes": 2274,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-assignments",
+      "source_path": "mod3/mod3_hw.Rmd",
+      "destination_path": "assignments/mod3/mod3_hw.Rmd",
+      "source_status": "committed",
+      "source_sha256": "7de0c856a0c94894f900e56b3eec7bbf0e0a9715ec0ba73e532be9f22ed3a5fa",
+      "destination_sha256": "7de0c856a0c94894f900e56b3eec7bbf0e0a9715ec0ba73e532be9f22ed3a5fa",
+      "bytes": 4463,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-assignments",
+      "source_path": "mod4/mod4_hw.Rmd",
+      "destination_path": "assignments/mod4/mod4_hw.Rmd",
+      "source_status": "committed",
+      "source_sha256": "8e18ff621ddbff7c1fd1e0d0b41340a489e8dbd13c223fffa17b01c271749608",
+      "destination_sha256": "8e18ff621ddbff7c1fd1e0d0b41340a489e8dbd13c223fffa17b01c271749608",
+      "bytes": 2618,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-assignments",
+      "source_path": "mod5/mod5_hw.Rmd",
+      "destination_path": "assignments/mod5/mod5_hw.Rmd",
+      "source_status": "committed",
+      "source_sha256": "e9ac27e4f0dfdca41522aedaacc2fbd738a9187cd52f400f71bf085f8def5702",
+      "destination_sha256": "d3f6549bef7dd13e734247bc0ebc0df67fccb9c2dd17de2ac431bb6996de4760",
+      "bytes": 2254,
+      "editorial_changes": [
+        "Replaced private class signup link and name-entry instructions with public-edition note."
+      ]
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-assignments",
+      "source_path": "mod6/mod6_hw.Rmd",
+      "destination_path": "assignments/mod6/mod6_hw.Rmd",
+      "source_status": "committed",
+      "source_sha256": "14abc182f82a72bbe90719c7c91fec85c4ea1384165ad46568e9beebe34c129b",
+      "destination_sha256": "14abc182f82a72bbe90719c7c91fec85c4ea1384165ad46568e9beebe34c129b",
+      "bytes": 2716,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-assignments",
+      "source_path": "mod10/hw-10.Rmd",
+      "destination_path": "assignments/mod10/hw-10.Rmd",
+      "source_status": "committed",
+      "source_sha256": "a82e0546bf7e4212d69272a70d11ec3f8576b505a0c30643371dec90d69a54da",
+      "destination_sha256": "a82e0546bf7e4212d69272a70d11ec3f8576b505a0c30643371dec90d69a54da",
+      "bytes": 2884,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-assignments",
+      "source_path": "mod12/mod12-hw-time-series.Rmd",
+      "destination_path": "assignments/mod12/mod12-hw-time-series.Rmd",
+      "source_status": "committed",
+      "source_sha256": "7075cf2a163de1ef321f882487306af8c2e92235d3dd1ebcfc5cc90c19afaa94",
+      "destination_sha256": "7075cf2a163de1ef321f882487306af8c2e92235d3dd1ebcfc5cc90c19afaa94",
+      "bytes": 14974,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-assignments",
+      "source_path": "mod13/mod13_hw.Rmd",
+      "destination_path": "assignments/mod13/mod13_hw.Rmd",
+      "source_status": "committed",
+      "source_sha256": "28aebf4c62a44faac61b2be28f8989434c07e699d6fc6911a9cdb0645bd9d00b",
+      "destination_sha256": "28aebf4c62a44faac61b2be28f8989434c07e699d6fc6911a9cdb0645bd9d00b",
+      "bytes": 4116,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-assignments",
+      "source_path": "mod15/mod15-hw.md",
+      "destination_path": "assignments/mod15/mod15-hw.md",
+      "source_status": "committed",
+      "source_sha256": "6773b9137a1017db3db7e593aa685c8fae6ecfb9ff8923157967e47e8c189131",
+      "destination_sha256": "079932dc58317736b61174d6419c77af02ef2d9cd8a8b9bc178dbdb2f6af9598",
+      "bytes": 1220,
+      "editorial_changes": [
+        "Removed live class survey link and noted that responses are withheld."
+      ]
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-assignments",
+      "source_path": "mod4/winequality-red.csv",
+      "destination_path": "assignments/mod4/winequality-red.csv",
+      "source_status": "committed",
+      "source_sha256": "4a402cf041b025d4566d954c3b9ba8635a3a8a01e039005d97d6a710278cf05e",
+      "destination_sha256": "4a402cf041b025d4566d954c3b9ba8635a3a8a01e039005d97d6a710278cf05e",
+      "bytes": 84199,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-class-code",
+      "source_path": "mod5/mod5_quickfire.Rmd",
+      "destination_path": "assessments/mod5/mod5_quickfire.Rmd",
+      "source_status": "committed",
+      "source_sha256": "748d92486cec3d2018eb94559f46693a54f1c4fd18ac2154d022f198e0f5bdea",
+      "destination_sha256": "748d92486cec3d2018eb94559f46693a54f1c4fd18ac2154d022f198e0f5bdea",
+      "bytes": 1794,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-class-code",
+      "source_path": "mod5/data_dictionary.md",
+      "destination_path": "assessments/mod5/data_dictionary.md",
+      "source_status": "committed",
+      "source_sha256": "e8ffda363b347404f98818d8145572c61b0ee7751f52052a27ed1ee9043503e5",
+      "destination_sha256": "e8ffda363b347404f98818d8145572c61b0ee7751f52052a27ed1ee9043503e5",
+      "bytes": 1538,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-class-code",
+      "source_path": "mod8-midterm/midterm_students.Rmd",
+      "destination_path": "assessments/mod8-midterm/midterm_students.Rmd",
+      "source_status": "committed",
+      "source_sha256": "909038ab8291ad8c120c04726cd9b888db282d425a9d8694071669e425087d70",
+      "destination_sha256": "909038ab8291ad8c120c04726cd9b888db282d425a9d8694071669e425087d70",
+      "bytes": 3659,
+      "editorial_changes": []
+    },
+    {
+      "source_repository": "DSI-EDA-2022/EDA-class-code",
+      "source_path": "mod15/quickfire2.Rmd",
+      "destination_path": "assessments/mod15/quickfire2.Rmd",
+      "source_status": "committed",
+      "source_sha256": "dcf1aa80fb419fd1f871cced4c49051d4368df5e4efc4e0f7098ace719d4171d",
+      "destination_sha256": "dcf1aa80fb419fd1f871cced4c49051d4368df5e4efc4e0f7098ace719d4171d",
+      "bytes": 1860,
+      "editorial_changes": []
+    }
+  ],
+  "previews": [
+    {
+      "source_path": "lessons/mod2/mod2_students.Rmd",
+      "destination_path": "lessons/mod2/mod2_students.md",
+      "sha256": "df4b4a67b63e15399e05dea091454f27515d5036582f407451dff0052cc99429",
+      "executed": false
+    },
+    {
+      "source_path": "lessons/mod3/mod3_day1_student.Rmd",
+      "destination_path": "lessons/mod3/mod3_day1_student.md",
+      "sha256": "f0b2a356228f202d012d24d1c6eff0c5ebe2830176459a272109ea3b7eeb59ce",
+      "executed": false
+    },
+    {
+      "source_path": "lessons/mod3/mod3_day2_student.Rmd",
+      "destination_path": "lessons/mod3/mod3_day2_student.md",
+      "sha256": "ccf603d28cbcd72abeb6c0ad677f75e8dbebc9bdc2a75bdf395d68bd7129f9fc",
+      "executed": false
+    },
+    {
+      "source_path": "lessons/mod4/mod4_student.Rmd",
+      "destination_path": "lessons/mod4/mod4_student.md",
+      "sha256": "0c8c099a760306c390fe1d78fac5fe129db8e65b78700ef7bd0130def90fcb81",
+      "executed": false
+    },
+    {
+      "source_path": "lessons/mod5/mod5_lecture_students.Rmd",
+      "destination_path": "lessons/mod5/mod5_lecture_students.md",
+      "sha256": "ed611d94f5c896bf856a8799dc4445cb13bf1ef9a31d5294179a4fbefa350cb1",
+      "executed": false
+    },
+    {
+      "source_path": "lessons/mod6/mod6_missing_data_student.Rmd",
+      "destination_path": "lessons/mod6/mod6_missing_data_student.md",
+      "sha256": "c8bca9498a461c72b20a500ff44fd4555d0358677fac8927ade8c277b2d380c8",
+      "executed": false
+    },
+    {
+      "source_path": "lessons/mod10/day2-live-coding-student.Rmd",
+      "destination_path": "lessons/mod10/day2-live-coding-student.md",
+      "sha256": "0b91fdc7a2cdf2698344c66f6c25fca7423e609d27779c637423983fd630e924",
+      "executed": false
+    },
+    {
+      "source_path": "lessons/mod11/mapping-ssta.Rmd",
+      "destination_path": "lessons/mod11/mapping-ssta.md",
+      "sha256": "33c29ce18a793f753268e56c7baf43d09be694df8cf86d28cf1fa6ceb3be2e01",
+      "executed": false
+    },
+    {
+      "source_path": "lessons/mod12/mod12_spatial_student.Rmd",
+      "destination_path": "lessons/mod12/mod12_spatial_student.md",
+      "sha256": "9eea314f07d606b5931e9bf2f56c62d0dc95c63c1037802262b337143ca9c2ec",
+      "executed": false
+    },
+    {
+      "source_path": "lessons/mod13/mod13_student.Rmd",
+      "destination_path": "lessons/mod13/mod13_student.md",
+      "sha256": "e700b00d706beeffd9698708a5be78858783ddf6d1fbe7f4849aa48d55b90fcd",
+      "executed": false
+    },
+    {
+      "source_path": "assignments/mod2/mod2_hw.Rmd",
+      "destination_path": "assignments/mod2/mod2_hw.md",
+      "sha256": "e55084fbfb8a7102ce296029e6eaab73f442d0c2879f8e0446cbfde754638699",
+      "executed": false
+    },
+    {
+      "source_path": "assignments/mod3/mod3_hw.Rmd",
+      "destination_path": "assignments/mod3/mod3_hw.md",
+      "sha256": "c95e96e7cce510294772e40cae93a0468998d4b8dd273323324c614b264d1e24",
+      "executed": false
+    },
+    {
+      "source_path": "assignments/mod4/mod4_hw.Rmd",
+      "destination_path": "assignments/mod4/mod4_hw.md",
+      "sha256": "2cbc3d02ec62447dc57210d02326be7627a2ed1c4f1710e1002d7035eea05d4e",
+      "executed": false
+    },
+    {
+      "source_path": "assignments/mod5/mod5_hw.Rmd",
+      "destination_path": "assignments/mod5/mod5_hw.md",
+      "sha256": "66d5eb1f558379d0ef77277e4e51e9b27934a4b42bb4fd8003ad67f967792f25",
+      "executed": false
+    },
+    {
+      "source_path": "assignments/mod6/mod6_hw.Rmd",
+      "destination_path": "assignments/mod6/mod6_hw.md",
+      "sha256": "e51fc62badb56fcc5919fc106f154c806b321c96ed4f993ecdae2793b679c753",
+      "executed": false
+    },
+    {
+      "source_path": "assignments/mod10/hw-10.Rmd",
+      "destination_path": "assignments/mod10/hw-10.md",
+      "sha256": "75b5688819c667d82f1fd1b6bee5ee5ce4b0df6ffa5743fddae5c6f576dad8ac",
+      "executed": false
+    },
+    {
+      "source_path": "assignments/mod12/mod12-hw-time-series.Rmd",
+      "destination_path": "assignments/mod12/mod12-hw-time-series.md",
+      "sha256": "fed7cc170b145427b36c6f931f633fe7bbc2c6eb710dc237e8b3973de8479cb3",
+      "executed": false
+    },
+    {
+      "source_path": "assignments/mod13/mod13_hw.Rmd",
+      "destination_path": "assignments/mod13/mod13_hw.md",
+      "sha256": "d4c504ad84647f2cf14c5e427a9866fa0a9651e45ce804b2182ccc2f1a841e1a",
+      "executed": false
+    },
+    {
+      "source_path": "assessments/mod5/mod5_quickfire.Rmd",
+      "destination_path": "assessments/mod5/mod5_quickfire.md",
+      "sha256": "d2954f3c4b28290e582306c950ac927da5fd562e8309cfe6511394399f654a64",
+      "executed": false
+    },
+    {
+      "source_path": "assessments/mod8-midterm/midterm_students.Rmd",
+      "destination_path": "assessments/mod8-midterm/midterm_students.md",
+      "sha256": "678a22b460e91c7f42206c738e12d7d05a5db91b70ec5a81eb7e3d3431ffb980",
+      "executed": false
+    },
+    {
+      "source_path": "assessments/mod15/quickfire2.Rmd",
+      "destination_path": "assessments/mod15/quickfire2.md",
+      "sha256": "c8d6e97ef2755218f5895e37105f7125bbb3ca02a3038732c066491685001599",
+      "executed": false
+    }
+  ],
+  "adapted_project_guide": {
+    "source_repository": "DSI-EDA-2022/EDA-project-ex",
+    "source_path": "README.md",
+    "source_sha256": "cf51b27241784519df6608a67b87adc44e6b286a80b049e0bb8db28cdb7fa624",
+    "destination_path": "project-template/README.md",
+    "destination_sha256": "d22c412fa05b5f373a71bec80cf09dbb929bcb77fa4293c4c1b72b7ee97f0cda",
+    "status": "Adapted guide; placeholders and historical schedule omitted; new folder notes and meeting-note scaffold."
+  },
+  "wine_verification": {
+    "source": "https://archive.ics.uci.edu/static/public/186/wine+quality.zip",
+    "byte_identical_to_official_file": true,
+    "sha256": "4a402cf041b025d4566d954c3b9ba8635a3a8a01e039005d97d6a710278cf05e",
+    "license": "CC BY 4.0"
+  }
+}

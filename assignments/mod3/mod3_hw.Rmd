@@ -1,0 +1,106 @@
+---
+title: "Week 4 homework assignment"
+author: Student Name
+date: Due Date
+output: github_document
+editor_options:
+  chunk_output_type: inline
+---
+
+## DSI-EDA
+## Professor Cassy Dorff
+
+Your homework is due at 11:59 PM on Wednesday. Please knit to github flavored markdown to submit.
+
+### The Data
+
+More "real" data for you that is not build into the tidyverse package but is instead used by scientists! This means it might be odd looking or require extra attention or cleaning.
+
+The National Oceanic and Atmospheric Administration (NOAA) produces many datasets on climate, ocean science, and atmospheric science. If you have ever watched a US weather report, you will have seen NOAA data!
+
+In this homework, we will investigate NOAA's Storm Events dataset. This is a collection of data on the details of storm events such as tornados, heat waves, and floods for each year -- going back to the 1950s. The dataset we will be using is for the year 2020. Download that data through this link: https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/StormEvents_details-ftp_v1.0_d2020_c20220816.csv.gz (note: the data will download as a .gz file - you will need to unzip/extract the file to access the data).
+
+*You will have to put the data in the right place to use it for your homework.*
+
+The data dictionary can be accessed here: https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/Storm-Data-Bulk-csv-Format.pdf
+
+If you are interested in other years, feel free to check them out on this web-accessible folder (WAF): https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/ 
+
+```{r}
+# recommended libraries
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(stringr)
+```
+
+### Data Exploration
+
+The Storms Events dataset includes information on the type of storm, storm severity, the location, time of day, and even effects of the storm such as deaths, injuries, and damage costs. Let's explore this a bit further.
+
+```{r}
+# storm event data
+# recommendation on reading the data in:
+storms <- read_csv("StormEvents_details-ftp_v1.0_d2020_c20220816.csv", 
+    col_types = cols(BEGIN_YEARMONTH = col_date(format = "%Y%m"), 
+        BEGIN_DAY = col_integer(), 
+        END_YEARMONTH = col_date(format = "%Y%m"), 
+        END_DAY = col_integer(), 
+        EPISODE_ID = col_character(), 
+        DAMAGE_PROPERTY = col_number(),
+        DAMAGE_CROPS = col_number(),
+        EVENT_ID = col_character()))
+
+head(storms)
+```
+
+1. First, create a bar plot that shows the deadliest types of storms (the event types with the most direct/indirect deaths - note that there are two columns for deaths information). Which storm has the most deaths associated with it? 
+
+2. What conclusions can you draw from this plot? How might it be misleading?
+
+```{r}
+
+  
+```
+
+Storms can cause injuries, too. Let's see what the most harmful storms are by calculating the storm types with the most injuries *and* deaths associated with them. 
+
+3. Which storms are the most harmful? Make a plot of the most "Most Harmful Storm Types in 2020." Include appropriate labels.
+
+```{r}
+
+
+
+```
+
+4. How is this plot similar or different to the one you created first? What conclusions can you draw from these two plots? How might this plot be misleading? Use *complete* sentences.
+
+
+Each year, NOAA publishes a Billion-Dollar Disasters report, which details the numbers and locations of natural disasters in the US with damage and costs exceeding $1 billion. You can read more about the Billion-Dollar Disasters here: https://www.ncei.noaa.gov/access/billions/
+
+5. Our Storm Events dataset has the damage costs in thousands of dollars associated with each storm event. Which event types are the costliest (note: there are two columns for damage costs)?
+
+6. How could this graphic be misleading? Are there other costs associated with storms besides property and crop damage? 
+
+7. What could you conclude based on all three of the graphics you have created?
+
+```{r}
+
+
+
+```
+
+#### Your Turn
+
+What else could you visualize with this dataset? Ask a new question about the data, clearly state the question, then explore and plot a new relationship below and give an explanation for what this visualization says about the data.
+
+```{r}
+# plot
+ggplot() 
+```
+
+
+### Extra / Bonus
+
+You might remember the March 2020 tornado that caused a lot of damage in the Nashville area. Can you find this storm in the dataset? What other information can you find about this event from the data?

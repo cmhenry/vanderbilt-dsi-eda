@@ -1,0 +1,92 @@
+---
+title: "week10-hw.Rmd"
+author: "Dr. Cassy Dorff"
+date: "10/28/2021"
+output: html_document
+---
+## READ CAREFULLY
+
+There are a couple of items for you to do in addition to what is in this RMD file:
+
+1. Re-read the lecture code for review then attempt the 'on your own' section of the text-as-data lecture code. You do not need to turn this in but it is very good practice. 
+
+2. Install and library the packages below BEFORE coming to class on Tuesday so we will not use up class time next on Tuesday doing this:
+
+- `ncdf4` package
+- `raster` package
+
+## Text-as-data homework
+
+1. Pick one (two if you want a challenge) of the following data sources (descriptions above the data import)
+2. Import your data into R
+3. Perform any additional cleaning tasks as needed.
+4. Complete the tasks below for each data.
+
+```{r}
+library(readr)
+library(tidyverse)
+library(tidytext)
+library(textdata)
+library(ggplot2)
+
+# 1. archive of 216,930 past Jeopardy questions
+jeopardy <- read_csv("JEOPARDY_CSV.csv")
+
+# 2. Cartoon South Park script information including: season, episode, character, & line.
+southpark <- read_csv("https://raw.githubusercontent.com/BobAdamsEE/SouthParkData/master/All-seasons.csv")
+
+# 3. Sentiment analysis data about problems of major U.S. airlines. Twitter data was scraped from February of 2015 and contributors were asked to first classify positive, negative, and neutral tweets, followed by categorizing negative reasons (such as "late flight" or "rude service")
+tweets <-  read_csv("tweets.csv")
+
+# 4. nearly 7,000 pages of Clinton's heavily redacted emails 
+emails <- read_csv("Emails.csv")
+
+# 5. 3 Million crowdsourced News headlines published by now defunct clickbait website The Examiner from 2010 to 2015.
+examiner <- read_csv("examiner-date-text.csv")
+
+#6. 2.7 Million News Headlines with category published by Times of India from 2001 to 2017. 
+indianews <- read_csv("india-news-headlines.csv")
+
+```
+
+For tips and tools on how to clean up difficult text data, please visit the TidyText website here: https://www.tidytextmining.com/tidytext.html
+
+ 
+## Word count
+
+1. Tokenize your corpus and generate a word count.
+2. Using the `TidyText` package, remove stop words and generate a new word count.
+3. Create a visualization of the word count distribution and interpret your results.
+
+```{r}
+
+
+```
+
+## Tf-idf
+
+1. Generate a tf-idf measure of words in your dataset.
+2. Create a visualization of the tf-idf measure and interpret your results.
+3. Is the basic word count or the tf-idf more appropriate for your analysis?
+
+```{r}
+
+```
+
+## Sentiment analysis
+
+1. Using the built-in sentiments from `TidyText`, generate sentiment counts for your words using either the basic word count or tf-idf measure from above.
+2. Create a visualization of the sentiment measure. Interpret your results.
+
+```{r}
+
+```
+
+
+
+
+# Data Sources
+https://github.com/niderhoff/nlp-datasets
+
+
+

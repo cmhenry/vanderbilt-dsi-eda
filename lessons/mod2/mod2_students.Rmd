@@ -1,0 +1,310 @@
+---
+title: "Lecture 2"
+author: "Dr. Cassy Dorff"
+date: "8/30/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+# Summarizing Data 
+
+Key themes overview:
+
+- how to "look" at your data when you first load it in
+- there are two familiar ways of storing tabulated data: in a “wide” format, and in a “long” format. *Wide* data has a column for each variable. 
+- you will hear people use different terms like "variable" and "attribute" to describe "features" of data
+- you've learned to 'index' using brackets and the `$` symbol, this lesson builds on your familiarity with "indexing" to manipulate data 
+- apply basic summary statistics
+- learn to look at relations between variables not just a single variable
+
+--- 
+
+## Long vs wide data
+
+As I mentioned, there are typically two ways that "observational, "rectangular" data are typically stored. *long* and *wide* data. In general, we tend to find data in the "rectangular" data format, i.e. collections of values that are each associated with a variable and an observation. We can quickly think of data types that do not fit this description: images, videos, text, audio, and even sometimes network data. Let's consider the two examples of data organization below.
+
+Which is this? 
+
+Product   Attribute   Value
+-------   ---------   -----
+A         Height      10
+A         Width       5
+A         Weight      2
+B         Height      20
+B         Width       10
+
+The same data in a *wide* format would be:
+
+Product  Height  Width  Weight
+-------  ------  -----  ------
+A        10      5      2
+B        20      10     NA
+
+An easy way to spot the difference is to look for categorical data. In the first case we see that the variable "attribute" contains the categories "Weight" and "Height." (E.g., this is called a "categorical" variable) For each variable to have their own column, as in the *wide* format, we see "weight" and "height" have their own column, like is shown in table 2. This is an intuitive way to record data, but not often to use the data in R. Keep these different structures in mind as we look at data today.
+
+## Set up
+```{r, echo=FALSE}
+# libraries
+# library(tidyverse)
+
+# if you dont want full tidyverse
+library(ggplot2)
+library(dplyr)
+library(nycflights13)
+```
+
+Let's start with the flights data. Below, we see the *wide* format, which looks a lot like something you might view in excel.
+
+## Basic exploration to describe your data
+
+State the obvious. What do we see?
+
+```{r}
+nrow(flights)
+```
+
+We might say, depending on how the data is organized (we will examine this with `head` below) that it has over 336,000 cases (or units or observations) and 19 variables (or features) that describe the units.
+
+```{r}
+# number of columns
+ncol(flights)
+
+# or you might just do dim
+dim(flights)
+```
+
+What is in the columns of the data?
+
+```{r}
+names(flights)
+```
+
+Already we are getting a feel for the shape and size of the data. 
+
+- How is it set up? 
+- What kind of object is it to R? 
+- What does it seemed to be organized by? These are the kinds of questions you always want to ask first about the data you are about to explore.
+
+```{r}
+head(flights)
+```
+
+## Indexing with example data
+
+To do this, we take advantage of the data frame set up which is similar to a matrix that reflects the R X C (i.e., ROW * COLUMNS) principle. 
+
+Note: To manipulate data frames in R we can use the bracket notation to access the indices for the observations and the variables. It is easiest to think of the data frame as a rectangle of data where the rows are the observations and the columns are the variables. Just like in matrix algebra, the indices for a rectangle of data follow the RxC principle; in other words, the first index is for Rows and the second index is for Columns [R, C].When we only want to subset variables (or columns) we use the second index and leave the first index blank. (From:https://stats.idre.ucla.edu/r/modules/subsetting-data/)
+
+```{r}
+# basic data frame example
+# create a data frame with 2 rows, one that contains numbers and the other contains characters
+row1 = seq(1,10,1)
+row2 = c("a","b","c","d","e","f","g","h","i","j")
+data_basic = as.data.frame(cbind(row1, row2), stringsAsFactors=FALSE)
+data_basic
+```
+
+We can think of data frames as "2D" with rows and columns. 
+Get familiar with subsetting based on your understanding of this structure. For example:
+
+```{r}
+# select the first column row1
+
+
+
+
+
+# subset rows (with a 'relational operator" for "does not equal") to those rows that do not contain "a"
+# try to do on your own
+
+```
+
+## Base R indexing with flights data
+
+Now lets try similar moves with our flights data. Again, see if you can do it in base R with basic subsetting.
+
+```{r}
+# students
+# create a new object that returns a vector for the column called "origin"
+
+
+
+
+# students:
+# create a new object that is a subset of the original data frame and contains 50 rows and 3 variables
+# name that object foo
+
+```
+
+How might we quickly see which origin airports are included in the data?
+
+```{r}
+
+
+```
+
+**On your own, can you find all the flights whose origin is 'JFK' using base R?**
+
+```{r eval=FALSE}
+
+
+```
+
+### Sorting Data
+
+Sorting the data starts to give us a sense of how the data is organized. We might want to also begin looking into individual variables. For example, we can also summarize the data using built-in functions like `median`, `min`, `max` and `mean.`
+
+*beware of NAs!*
+
+```{r}
+min(flights$air_time, na.rm=TRUE)
+max(flights$air_time, na.rm=TRUE)
+summary(flights$air_time)
+
+# sort data by shortest airtime
+new_data <- flights[order(flights$air_time),]
+new_data
+
+# sort data by departure delays
+delay_data <- flights[order(flights$dep_delay),]
+delay_data
+```
+
+### End of base R review. 
+
+- **What I want you to understand in this very first lecture is that there are multiple ways to achieve almost any goal in R**. 
+- You might use base R or tidy verse or need to learn other packages for a specific project. 
+- As you get better with R, your choices will depend on the data and project. Knowing how to read base R will absolutely help you learn to code better.
+
+### Stop/Brainstorm
+
+What kind of questions do these preliminary summaries help you generate?
+
+### Summarize relationships between variables
+
+After investigating the data, it is time to begin to summarize the data based on **questions.** You will learn more about `summarize()` and `group_by` in your programming class today. 
+
+How can we calculate which airport has the highest average delayed arrival time?
+
+- Hint: use vars `arr_delay` and `origin.`
+- Challenge: for those who are familiar with `apply()` functions in base R or the base R friendly function `aggregate()`try to see if you can do this in both base R and tidy.
+- See `installed.packages(priority="base")` for more.
+
+```{r}
+
+agg_tidy <-
+  
+  
+  
+ggplot()
+```
+
+
+# New data: breweries
+
+Now try to load the data below. Take some time to 'look' at the data and get familiar with its structure.
+
+Load in "ncbreweries data" using 'load' or the Rstudio GUI.
+
+
+```{r}
+# load data
+load("ncbreweries.rdata") 
+
+# use the commands from the earlier part of the 
+# lesson to check the dimension, set up, and variable names
+# state the basics
+colnames(ncbreweries)
+dim(ncbreweries)
+head(ncbreweries)
+class(ncbreweries)
+
+# check out using tidyverse
+glimpse(ncbreweries)
+```
+
+_What do we see?_
+
+In the columns we see attributes that contain information about each Brewery. This information is easy to "read" but might prove difficult, in this format, for plotting and analysis.
+
+"Long" formatted data (versus wide) is useful for visualization because each **variable** (or attribute) is represented by a column.
+
+Using some quick indexing, how would we view the different type of breweries available in the data?
+
+```{r}
+# try to create a new object called "temp" that subsets ncbreweries by the "type" variable
+temp <- ncbreweries[, type]
+```
+
+Why didn't the above code work? What does the error indicate?
+
+The base R syntax for subsetting a dataframe requires you to specify the column name as a string. Each column that evaluates true against the argument (in this case “type”=“type”) is returned.
+
+```{r}
+temp <- ncbreweries[, "type"]
+```
+
+What class is the object?
+
+```{r}
+class(temp)
+```
+
+Now, how can we calculate the mean beer count for each type of brewery? (There are five types) using a tidy approach?
+
+```{r}
+# in tidy (try in groups)
+
+
+```
+
+Bonus, for those who want it, try in base R.
+
+```{r}
+
+
+```
+
+
+Next, can you make a simple graphic of this data? 
+
+```{r}
+# try in groups
+ggplot()
+
+# in base R
+
+```
+
+----
+
+
+## A little less guidance now 
+
+Load in the `election2012.RData` file. 
+
+Create a code chunk in RMarkdown that tells us the number of rows, cols, the names of all of the variables in the data set, and the State(s) of the first few observations. What do you see? 
+
+
+ Information on data. County level elections results
+ -Totalvotes - total number of votes in the county
+ -Demvotes - total number of votes received by Dem in that county
+ -DemVotesTotalPercent - the percentage of the votes for the Dems in that county
+
+```{r}
+# load data
+load("election_2012.RData") 
+```
+
+
+
+
+
+
+
+## references for today's lecture
+
+- https://github.com/arunsrinivasan/flights
+- https://stackoverflow.com/questions/27886839/what-does-error-object-myvariable-not-found-mean
+- https://rcompanion.org/handbook/C_04.html
+

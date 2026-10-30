@@ -1,0 +1,112 @@
+---
+title: "Mod 13- Kmeans HW"
+author: "Dr. Cassy Dorff"
+date: "11/17/2022"
+output:
+  html_document:
+    keep_md: true
+urlcolor: blue
+subtitle: DSI-Explore
+editor_options: 
+  chunk_output_type: console
+---
+# DUE DATE: Wednesday Nov. 30th before midnight.
+
+
+```{r}
+library(janitor)
+library(stats)
+library(tidyverse)
+library(patchwork)
+
+# you might need to install factoextra if you haven't already 
+# install.packages("factoextra")
+library(factoextra)
+
+
+```
+
+
+## Covid Data! 
+
+Let's now turn to data you cannot find a tutorial on! We have gone an entire semester and managed to not make everything about COVID, but finally we've arrived. I originally found horse racing data, and for those of you interested, check this out : http://horseracingdatasets.com/payouts/
+
+1. Prepare the data for k-means
+
+```{r, load the data}
+# covid data!
+
+df_covid <- read_csv("covid.csv")
+
+# Convert Country name variable to rownames
+df_covid <- df_covid %>% 
+  clean_names() %>% 
+  column_to_rownames("country")
+
+# keep the variables we're interested in
+df_new <- df_covid %>% 
+  dplyr::select('p_db', "p_copd", "p_hiv", "p_tbc", "gdp_2017", "pop_men", "pm2_5", "uhc_index_2017")
+
+# scale the new dataframe 
+df_new <-
+    
+```
+
+Read a bit about the variables:
+
+- `p_db`: covid prevalence 
+- `p_copd`: disease [COPD] 
+- `p_hiv`: disease HIV/AIDS 
+- `p_tbc`: tuberculosis 
+- `gdp_2017`: Gross domestic product 
+- `per capita pop_men`: Proportion of males in the country 
+- `pm_2.5`: Concentration of 2.5 particulate matter by country (Air quality metric) 
+- `uhc_index_2017`: Universal health coverage index of service coverage
+
+This data was found from this article : https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7308996/
+
+Summary of article approach: Unsupervised machine learning algorithms (k-means) were used to define data-driven clusters of countries; the algorithm was informed by disease prevalence estimates, metrics of air pollution, socio-economic status and health system coverage. Using the one-way ANOVA test, we compared the clusters in terms of number of confirmed COVID-19 cases, number of deaths, case fatality rate and order in which the country reported the first case.
+
+Covid data summary: "number of confirmed deaths (as of 23/03/2020); case fatality rate per 1,000 cases (as of 23/03/2020)." 
+
+## Optimal Clusters
+
+2. Can you first determine the optimal number of clusters using k-means and our scaled dataset? 
+
+```{r, cluster analysis}
+
+
+
+```
+
+3. Then can you run the k-means algorithm with this value of K?  Next, examine the clusters visually using the default parameters from `fviz_cluster`. Do these seem to make sense? Why or why not?  
+
+```{r, visual examination (default)}
+
+
+
+```
+
+4. Then, read the documentation for the `fviz_cluster` and see if you can improve on the default plot. Consider plotting different original variables from the data on the axes to aid in interpretation of the clusters. Another option is to create a plot showing different results for different values of k, so you can further highlight why you chose the value of k that you chose. Either kind of 'final plot' is acceptable. 
+
+```{r, visual examination (user improved)}
+
+
+
+```
+
+
+# Some Notes: Potential Issues with K-means
+
+- Requires us to pre-specify the number of clusters/optimize. 
+- Different results can occur if you change the ordering of your data. Different starting points in the iterative process can lead to different results!
+- Typically roughly equal sized clusters even if that's not what the data look like. What if there are actually two clusters in the data but they're uneven? k-means has trouble clustering data where clusters are of varying sizes and density. For example, k-means fails to discover clusters with non-convex shapes.
+
+# Benefits K-means
+
+1) Your boss wants you to categorize survey respondents, etc into groups quickly, this will do it!
+2) Easy even with large datasets
+3) Easily adaptable
+4) Applications where finding out the overall impressions or general patterns are the point (i.e which areas are high in crime, which shows you may like, etc. ) and precision is less important. 
+
+

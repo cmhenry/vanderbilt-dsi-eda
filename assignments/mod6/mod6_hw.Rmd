@@ -1,0 +1,48 @@
+---
+title: "Mod 6 Hw"
+author: "Dr. Cassy Dorff <br>"
+date: '2022-09-29'
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+# what libraries do you think you'll need?
+# probably tidyverse and naniar
+```
+
+Imagine we have a study of 1000 people. Everyone recruited in our study were college level power lifter in their 20s (an apparently popular sport I know!). They voluntarily enrolled in the study because the goal of the study is to help athletes change from one sport to another in their 30s. Specifically, this study has a control group and a treatment group. The control group receives no treatment. The treatment group is given a special workout that is suppose to help them loose a bit of muscle mass because now instead of being power lifters, they want to be elite runners! 
+Load the data. 
+
+```{r}
+workout_data <- read_csv("workout_data.csv")
+```
+
+1. Inspect the data. Write 2-3 sentences describing the data. 
+
+2. You see that there are three weight variables. Let's imagine that the researchers invented three separate ways to measure weight. The researchers are happy--all three measurements report very similar measures! Yet, we have different missing data for each. Inspect and report the % missingness for each weight variable.
+
+3. Next, assess the *patterns* of missingness of each of the weight variables. Do you think `weight_1` is MCAR, MAR or MNAR? Use your best coding evidence to support these claims.
+
+4. Is weight_2 MCAR, MAR or MNAR? Use your best coding evidence to support these claims.
+
+5. Is weight_3 MCAR, MAR or MNAR? Use your best coding evidence to support these claims.
+
+RECALL: (See slides for more info)
+
+*Missing Completely at Random (MCAR)*
+
+- MCAR occurs when there is a  probability that data will be missing, and that probability is unrelated to anything else in your study. We tend to think of this as 'truly random' missingness. 
+
+*Missing at Random (MAR)*
+
+- MAR happens when the missingness is related to information in your study, and all or some of the relevant information to predict missingness is in the existing dataset. I.e., we can figure out a reason/pattern why the missingness is happening using the data itself.  
+
+*Missing Not at Random (MNAR)*
+
+- NMAR is like MAR in that the missingness is related to what is happening in the study/data but differs in that the data that are related to the missingness included in the data that are missing. I.e., we don't really know why they are missing and/or do not have data that seems to help us figure this out!
+
+To start, we typically we can investigate missingness in our data by assessing if missingness is MCAR or MAR. If it is not either of these, it is likely MNAR.
+

@@ -1,0 +1,153 @@
+---
+title: "day2-live-coding-student"
+author: "Colin Henry"
+date: "2022-10-27"
+output: html_document
+---
+
+## Loading data
+This chunk of code loads or installs packages we need for text analysis. I've written a custom function here to handle that; feel free to copy it or use your own. This chunk also loads the text data --- a pre-formatted subset of poems from the Poetry Foundation website.
+
+```{r}
+loadPkg = function(toLoad){
+  for(lib in toLoad){
+    if(! lib %in% installed.packages()[,1])
+    { install.packages(lib, repos='http://cran.rstudio.com/') }
+    suppressMessages( library(lib, character.only=TRUE) ) }
+}
+
+packs=c('tidyverse', 'tidytext', 'textdata', 'tm', 'topicmodels')
+
+loadPkg(packs)
+
+df_poetry <- readRDS("subset-poetry-data.rds")
+
+```
+
+## Working with text data
+Our poetry data is contained in a dataframe. Let's take a look at what's included:
+
+```{r}
+
+```
+
+Let's begin our text analysis with some very basic operations from TidyText. The `unnest_tokens` function is a *tokenizer* function. It splits text up into simple objects based on the first input --- this can be a word, sentence, ngram, or other options. It generates a dataframe containing the word (and we've included the id of the document the word is from here, as well).
+
+```{r}
+
+```
+
+Now, we'll generate a count of the words, sort by the number of times the word occurs, and then plot the top 15 words in a bar plot.
+
+```{r}
+
+```
+
+This shouldn't be too surprising. Very common English stop words and articles dominate the text counts. Note, though, that text data can be *really* noisy, especially if you've obtained it through web scraping or from third-party social media data collection. There are often lots of artifacts floating around in these datasets. Some to look out for include:
+ - URLs
+ - Non-unicode characters --- always make sure you keep your text encoding straight, be it ASCII, UTF-8, or something else.
+ - Stop words
+ 
+What is a *stop word*? These are words that you most likely don't want to include in your analysis, and are often the most frequently used words in the language your text data is in. We should get rid of them before ranking thes words properly. Luckily, TidyText comes with built in English stop words! You can invoke them with `stop_words`. Take a look below:
+
+```{r}
+
+```
+
+Now, we have stop words that are domain-specific. That is, stop words that are unique to a corpus of text. For Twitter data, for example, these include `https`, `t.co`, and so on. Here we might have domain specific words we want to exclude, but we haven't identified them yet. 
+
+Now, we'll get rid of words from the dataframe that match the TidyText stop words.
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+Are there any words that we might want to exclude based on this list? I think we have a good argument for excluding "thou", "thy", and "thee", which are just Middle English stop words. Let's build a personal stop word list and apply it.
+
+```{r}
+
+```
+
+This is pretty good. You might find additional stop words like "hath" or "doth", but we're not English experts here. You'll likely have to have some expertise in the subject area you're researching or someone on your team you can consult to make analytical decisions like what stop words to include, however.
+
+## Sentiment analysis and TF-IDF
+
+Now, just the word count doesn't tell us all that much. Let's turn to a "better" count measure --- the term frequency inverse document frequency (tf-idf). What we're going to produce in this code chunk is a count of each word for each poem, plus a count of the total number of words in each poem. In other "words", the term frequency for each document.
+
+```{r}
+
+```
+
+OK, let's get our tf-idf. Use the `bind_tf_idf` function to have R do this for you automatically. The first input is the word itself, the second is the id of the document, and finally the count of words per document.
+
+```{r}
+
+```
+
+There are some interesting results here. What is the tf_idf column telling us? Why might our weights have produced these results?
+
+This is a look into the fascinating world of linguistics --- one reason we're getting these results is because of *Zipf's law of abbreviation*: the more frequently a word is used, the "shorter" the word tends to be. 
+
+### Sentiment Analysis
+
+Even though sentiment analysis isn't a super useful inferential tool, it is still fun to play around with. First, we'll load a pre-trained model containing word-emotion associations. 
+
+```{r}
+
+```
+
+## Topic modeling
+
+OK, now let's move on to some unsupervised classification. In a structural topic model, we'll take the features we generated above (word frequencies) and build a model of the underlying linguistic structures (topics). Note that there are no labels supplied here for the predictive model; instead, we will try to intuit a label or collection of labels from the topics generated.
+
+The first step is to build a document term matrix. This data type has rows that correspond to each document and columns that correspond to each term. So it's a pretty sparse matrix! Fortunately, the excellent `tidytext` package has a `cast_dtm` function that can build this for you:
+
+```{r}
+
+```
+
+With our DTM built, we can now build our first topic model using the Latent Dirichlet allocation, a statistical model that tries to discover a set of topics and then probabilistically sort documents (and features) into each topic class. Here we use the `LDA` function to build a model with 4 possible topics. 
+
+```{r}
+
+```
+
+Let's tidy up the LDA-generated topics and look at the `beta` measure, which is the probability a specific feature belongs to a specific topic. Then we'll drop this into a `tibble` that shows the top 5 terms for each topic.
+
+```{r}
+
+```
+
+This `tibble` will look nice in a visualization:
+
+```{r}
+
+```
+
+The `LDA` model provides other measures, as well. Here we'll take a look at the `gamma` measure, which assigns a documents a probability of containing each topic.
+
+```{r}
+
+```
+
+Let's sort them by the max `gamma`: here we see that document "O" has a 99.9% match with topic "4".
+
+```{r}
+
+```
+
+But what does that mean? Let's do some cleaning of our original dataset and merge it back in, so we can see what the document features are and see if there are inferences we can draw about the relationship between topics and documents.
+
+```{r}
+
+```
+
+On your own now: can you find a way to visualize topics, the top terms associated with a topic, and the tags associated with each poem? How well did the LDA do, in your estimation, of matching the tags of each poem?
+
+```{r}
+
+```

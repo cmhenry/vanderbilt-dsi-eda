@@ -1,0 +1,204 @@
+---
+title: "Mod 13- Kmeans"
+author: "Dr. Cassy Dorff"
+date: "11/17/2022"
+output:
+  html_document:
+    keep_md: true
+urlcolor: blue
+subtitle: DSI-Explore
+editor_options: 
+  chunk_output_type: console
+---
+
+# Introduction & Preparing the Data
+
+K-means clustering takes your unlabeled data and a constant, `k`, and returns `k` number of clusters that are within a specified distance of each other. It automatically groups together things that look alike so you don't have to!
+
+Let's begin with the `USArrests` data. This is a very common example, but it is useful. We will start here and then turn to other data.
+
+This data set contains statistics, in arrests per 100,000 residents for assault, murder, and rape in each of the 50 US states in 1973. It also has the percentage of population living in urban areas in each state.
+
+```{r}
+library(janitor)
+library(stats)
+library(tidyverse)
+library(patchwork)
+
+# you might need to install factoextra if you haven't already 
+# install.packages("factoextra")
+library(factoextra)
+
+data("USArrests")     
+head(USArrests, n = 3)
+```
+
+Variables are often scaled (i.e. standardized) before measuring the inter-observation dissimilarities. Scaling is recommended when variables are measured in different scales (e.g: kilograms, kilometers, centimeters, etc).
+
+Should I scale (or "center" the data)? Ask yourself: do I have two (or more) features, one where the differences between cases is large and the other small? Am I willing to have the former be a big driver of distance? If the first answer is yes and the second answer is no, you will likely need to scale your data. 
+
+See more on scaling and k-means, [here!](https://pdfs.semanticscholar.org/1d35/2dd5f030589ecfe8910ab1cc0dd320bf600d.pdf)
+
+```{r}
+# we see all values are numeric
+# scale the data set
+df <- scale(USArrests) 
+
+# for now...BUT remember what we talked about with missing data and imputation. 
+# Deleting this data is HORRIFIC practice generally speaking! 
+df <- na.omit(df)
+```
+
+Can you tell what actions the `scale()` function performed with default inputs? `scale` calculates the mean and standard deviation of each column vector, then subtracts the mean and divides by the standard deviation for each observation. It's especially useful when your dataset contains variables with widely varying scales (as highlighted above).
+
+# Examine Distance
+
+Within R it is simple to compute and visualize the distance matrix using the functions `get_dist` and `fviz_dist` from the `factoextra` R package. Though, you can certainly build your own plot from scratch to do this!
+
+- `get_dist`: for computing a distance matrix between the rows of a data matrix. The default distance computed is the Euclidean; however,
+- `get_dist` also supports other distance measures
+- `fviz_dist`: for visualizing a distance matrix
+
+```{r}
+distance <- get_dist(df)
+fviz_dist(distance, gradient = list(low = "#00AFBB", mid = "white", high = "#FC4E07"))
+```
+
+*Questions*
+
+- What does the function `get_dist()` do? What arguments does it take? What is its default measure?
+  + hint: check out [this link for a refresher on measuring distance](https://www.displayr.com/what-is-a-distance-matrix/).
+  
+
+- Why is it useful to visualize the distance matrix? 
+  + Note, there are different ways you can measure distance. We are using the classical euclidean measurement. [More here! Don't forget, as you get farther along using clustering, distance choice is more important](https://www.datanovia.com/en/lessons/clustering-distance-measures/#methods-for-measuring-distances)
+
+# Running the k-means algorithm 
+
+Below we will first set the seed before running the algorithm. Then, take note of the arguments for kmeans. 
+
+- What are the arguments for the `kmeans()` function?
+- Why is it important to set the seed? 
+
+We will use `kmeans() `on our `df` object and specify k as equal to 2 to begin. We can also change `nstart` to something like 25, if we wanted, since k-means is sensitive to its random starting positions. This means that R will try 25 different random starting assignments and then select the best results corresponding to the one with the lowest within-cluster variation. This part is important. Your answers will change potentially and especially if you don't use `nstart.` 
+
+```{r}
+# compute k-means with k=2
+set.seed(1234)
+k2 <- kmeans(df, centers = 2, nstart = 25)
+
+# Print the results
+print(k2)
+```
+
+## Results:
+
+- cluster sizes
+- cluster means 
+- cluster assignment
+- within cluster sum of squares by cluster
+- visualization
+
+Interpretation: The primary printed output tells us our analysis resulted in two groups with cluster sizes of 30 and 20 observations. Plus it gives us a matrix of cluster means, where the rows are the cluster number (in this case 1 to 2) and the columns are the variables in the data. We'd expect that observations in the same group (cluster) are similar to one another.
+
+The output also gives us a clustering vector to tell us the data point that is assigned to each cluster.
+
+The *"within cluster sum of squares by cluster"* output is useful here to use as a rough measure of goodness of fit for k-means. SS stands for Sum of Squares, and ideally you want a clustering that has the properties of internal cohesion and external separation, so here the between sum of squares/ total sum of squares ratio *should approach 1* if the model fits well. In other words, in this case we can interpret `47.5%` as the amount of variance explained by our analysis (so we might want to try more than 2 clusters, but remember you want them to remain 'interpretable!'). Recall: sum of squares = the squared distance of each point from its centroid summed over all points.
+
+# How does the K-means algorithm work? 
+
+Same material from slides: 
+
+1) The first step when using k-means clustering is to indicate the number of clusters (k) that will be generated
+2) The algorithm starts by randomly selecting objects from the data set to serve as the initial centers for the clusters. The selected centers are also known as cluster means or centroids. 
+3) Next, each of the remaining observations is assigned to it’s closest centroid, where closest is defined using the Euclidean distance between the object and the cluster mean. 
+4) The algorithm then computes the new mean value of each cluster. The term cluster “centroid update” is used to design this step. 
+5) Once the centers have been recalculated, every observation is checked again to see if it might be closer to a different cluster. All the objects are reassigned again using the updated cluster means.
+6) The cluster assignment and centroid update steps are iteratively repeated until the cluster assignments stop changing. 
+
+
+*NOTE* There are many methods to calculate this distance information; the choice of distance measures is a critical step in clustering. It defines how the similarity of two elements (x, y) is calculated and it will influence the shape of the clusters.
+For most common clustering software, the default distance measure is the Euclidean distance. However, depending on the type of the data and the research questions, other dissimilarity measures might be preferred and you should be aware of the options. 
+
+
+We can also view our results by using `fviz_cluster.` This provides a nice illustration of the clusters. If there are more than two dimensions (variables) `fviz_cluster` will perform principal component analysis (PCA) under the hood in order to plot the data points according to the first two principal components that explain the majority of the variance. Why is this needed? Because visualizing anything above 3D (but often even 2D) is very hard! And usually it is also difficult to interpret for human beings. You will learn more about how PCA works next semester. 
+
+```{r}
+fviz_cluster(k2, data = df) +
+  theme_minimal()
+```
+
+Wonderfully, because those PCA dimensions are difficult to interpret during EDA, you can also just use pairwise scatter plots to illustrate the clusters compared to the original variables which can aid in interpretation. 
+
+Below, on your own:
+
+1. Take our data, create a new 'cluster' variable (feature) in the data, then plot two variables from the original data in a scatterplot and color these points by their cluster indicator.
+
+*Practice*
+```{r}
+
+
+
+
+
+```
+
+2. Because the number of clusters (k) must be set before we start the algorithm, it is often advantageous to use several different values of k and examine the differences in the results. Execute the same process above but now for 3, 4, and 5 clusters, and the plot the results in one figure:
+
+```{r}
+
+
+
+
+
+
+```
+
+We could also look at the output for each of these to assess how well the clusters are mapping onto the data. 
+
+*Discuss*
+
+Stop and discuss: What might be driving these clusters, or the classes produced by the algorithm? Brainstorm ideas. 
+
+# Determining Optimal Clusters
+
+While the basic introduction to the methods above will help you explore your data in preliminary way, there are three common methods for determining the number of clusters to use in the analysis (k).
+
+- Elbow method 
+- Silhouette method
+- Gap statistic
+
+Recall that in general, our goal is to (a) define clusters such that the total intra-cluster variation (known as total within-cluster variation) is minimized and (b) be able to interpret our results. We will focus only on the Elbow method here, though you may explore the others on your own time.
+
+Fortunately, the process to compute the “Elbow method” has been wrapped up in a single function (`fviz_nbclust`).  The plot below will plot the `within cluster sum of squares` on the Y axis (recall this output is easily readible above from our first run of the algorithm) and the number of clusters `n` the X axis. 
+
+If the line chart looks like an arm, then the “elbow” (the point of inflection on the curve) is the best value of k. The 'elbow point' is where the within cluster sum of squares (WSS) doesn't decrease significantly with every iteration (or addition of a cluster). We can generally interpret this number to be an ideal cluster point (as moderated by your interpretation of the data as well).
+
+Together, let us examine and elbow plot for k-means analysis of this data:
+
+```{r}
+fviz_nbclust()
+
+```
+
+*Discuss*
+
+What is the optimal number of clusters? 
+
+Write the code above to re-run the algorithm with 4 clusters and plot the results by looking at the visualization for clusters (nothing new here, but just to come full circle)!
+
+```{r}
+# interpret SS ratio
+final <- kmeans(df, centers = 4, nstart = 25)
+final
+
+# can you make this plot more legible? 
+finalplot <- fviz_cluster(final, data = df) + 
+  ggtitle("k = 4") +
+  theme_minimal()
+finalplot
+
+# what about with the built in package's function?
+```
+
+In future analysis, you can actually *begin* with the elbow plot. Then you can narrow it down to a few options (maybe 3,4,5) if you are not confident. Next you can visually inspect the clusters, but do not forget to also check to see how much variance is explained by the clusters as well as whether or not you can interpret them.

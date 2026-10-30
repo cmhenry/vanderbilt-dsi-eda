@@ -1,0 +1,220 @@
+---
+title: "Mapping Sea Surface Temperature Anomalies"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Mapping Sea Surface Temperature using NOAA Data
+
+## Libraries
+```{r}
+library(ncdf4)
+library(raster)
+```
+
+## The Data
+
+### How is environmental data organized?
+Earth scientists such as geographers and oceanographers use a special data format specifically designed for Earth science data known as NetCDF (Network Common Data Form). NetCDF is specially suited for spatial data about the Earth because it organizes data points into **layers**. Each layer represents one time step, and contains the longitude, latitude, and data points for one moment in time. Scientists can examine how the data changes over time by navigating between these layers. The R library **ncdf4** allows us to use and manipulate NetCDF files progammatically.
+
+### How can I access environmental data?
+
+NOAA has several data products monitoring and estimating sea surface temperature. One of these is CoRTAD, the [Coral Reef Temperature Anomaly Database](https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.nodc:NCEI-CoRTADv6), which contains metrics related to thermal stress in coral reefs. We will access this database through a data server known as THREDDS (Thematic Real-time Environmental Distributed Data Services). If you visit the NOAA THREDDS webiste, you will see CoRTAD has several files to choose from, each featuring a difference metric. For our purposes today, we will focus on the "Filled SST Mean", "Sea Surface Temperature Anomaly (SSTA)", and "Thermal Stress Anomaly (TSA)".
+
+The ncdf4 **nc_open()** function allows us to open a NetCDF file by supplying a path on your local machine or a URL to a data server. We will use the URL pointing to the CoRTAD files of interest. 
+After we open the file, we can view it in R. This will show us the information (metadata) attached to it. This tells us the variable names, coordinates (such as time, latitude, and longitude), as well as other useful information.
+
+Let's start with CoRTAD's "Filled SST" dataset. This contains the weekly average sea surface temperatures from 1982 to 2019. Points on the globe which were not directly measured are filled in with statistical estimates. 
+
+```{r}
+# CoRTAD Filled SST
+url <- "https://www.ncei.noaa.gov/thredds-ocean/dodsC/cortad/Version6/cortadv6_FilledSST.nc"
+data <- nc_open(url)
+data
+```
+Calling the data variable will print out the dataset's metadata. It looks like a lot, but it actually contains useful information! For one, we can see that the dataset contains many variables plotted over longitude, latitude, and time. We don't need all of those variables. Instead, we can choose the variables we want to work with using the **ncvar_get** command by supplying the NetCDF object and the dataset variable name. In this case, let's look at "FilledSSTmean". The long name of this variable gives us an idea of what it contains: "a matrix showing the mean value for each pixel in Kelvin". In other words, this is the average SST value for each point in the dataset.
+
+```{r}
+sst_mean <- ncvar_get(data, "FilledSSTmean")
+```
+
+Let's take a look at the variable we just grabbed (sst_mean). What are the dimensions of this variable?
+
+```{r}
+# Find the dimensions of sst_mean
+# YOUR CODE HERE #
+
+
+```
+
+What do you think these dimensions could represent? (Hint: what defines coordinates in a map?)
+
+**Answer**: _________
+
+sst_mean is organized into a matrix of size _latitude by longitude_. Each value in our matrix represents the sea surface temperature at that coordinate point.
+
+We also want to grab the coordinates that "FilledSSTmean" uses, so that we know what coordinates to give our map. From the metadata, we can confirm that "FilledSSTmean" is a matrix organized by [lon, lat] (longitude and latitude). We can use the same ncvar_get command to pull these coordinates from the data.
+
+(Side note: it's common for latitude in NetCDF to be stored in reverse of how we want it in R. For now, just know that we use the **rev** function to make mapping easier on ourselves)
+```{r}
+lon <- ncvar_get(data, "lon")
+lat <- ncvar_get(data, "lat")
+lat <- rev(lat)
+
+```
+
+After you are done accessing your variables, it is good practice to close the server connection with **nc_close()**
+
+```{r}
+nc_close(data)
+```
+
+Now that we have all the variables we need, let's get to plotting!
+
+## Plotting the Data
+
+To plot our NetCDF data, we first need to convert it to a **raster**. A raster is a spatial grid where each cell represents a pixel on an image. This can be accomplished by calling the raster function and supplying the variable we want to plot (sst_mean), as well as the range of the coordinate values (x-axis for longitude, and y-axis for latitude). Once it is "rasterized," we can simply plot it in R using the base plot() function.
+
+```{r}
+r <- raster(t(sst_mean), xmn = min(lon), xmx = max(lon), ymn = min(lat), ymx = max(lat))
+
+# use R's plot function to plot the raster we just created
+# YOUR CODE HERE #
+
+```
+
+If you want to customize your map, you can change the color mapping R uses for each pixel value using the **col** argument in plot(). Try adding the argument **col = topo.colors(100)** to your plot function call.
+
+```{r}
+# plot the raster again, this time adding the argument for colors
+## YOUR CODE HERE ##
+
+
+```
+
+Try playing around with topo.colors and see what changing the number inside the parentheses does.
+
+```{r}
+## YOUR CODE HERE ##
+
+```
+
+
+**topo.colors()** is a nice color collection for making geography maps. The number supplied to the function tells R how many colors to include. There are many color palletes available in R; find a more comprehensive list [here](https://www.datanovia.com/en/blog/top-r-color-palettes-to-know-for-great-data-visualization/#r-base-color-palettes).
+
+What a nice map! Notice that we didn't import any map images to overlay on the data. Since our dataset contains sea surface temperature around the globe, we can see landmasses due to their lack of data values.
+
+Sea surface temperature is a good metric for visualizing the temperature of our oceans. However, SST is a raw measurement that doesn't account for seasonal changes. In the northern hemisphere, we have hotter temperatures in June-August and cooler temperatures in December-February. These natural fluctuations in temperature (called the climatology) make it difficult to visualize how the climate is changing. To solve this problem, scientists calculate a metric known as the Sea Surface Temperature Anomaly. This measurement takes the sea surface temperature at a point in time and compares it to the average temperature at that location for a climatological period (typicallly 30 years). CoRTAD's Sea Surface Temperature Anomaly dataset lets us explore this metric ourselves. 
+
+Because this dataset is so large, we will not download the full dataset. For this notebook, we will compare information from the first year of the data (1982) to the last year of the data (2019).
+
+```{r}
+ssta_first_url <- "https://www.ncei.noaa.gov/thredds-ocean/dodsC/cortad/Version6/cortadv6_SSTA.nc?time[0:1:0],lat[0:1:4319],lon[0:1:8639],SSTA[0:1:0][0:1:4319][0:1:8639],SSTA_Minimum[0:1:4319][0:1:8639],SSTA_Maximum[0:1:4319][0:1:8639],SSTA_Mean[0:1:4319][0:1:8639],SSTA_Frequency[0:1:0][0:1:4319][0:1:8639]"
+ssta_last_url <- "https://www.ncei.noaa.gov/thredds-ocean/dodsC/cortad/Version6/cortadv6_SSTA.nc?time[2085:1:2085],lat[0:1:4319],lon[0:1:8639],SSTA[2085:1:2085][0:1:4319][0:1:8639],SSTA_Minimum[0:1:4319][0:1:8639],SSTA_Maximum[0:1:4319][0:1:8639],SSTA_Mean[0:1:4319][0:1:8639],SSTA_Frequency[2085:1:2085][0:1:4319][0:1:8639]"
+ssta_first <- nc_open(ssta_first_url)
+ssta_last <- nc_open(ssta_last_url)
+ssta_first
+```
+
+
+Like the SST dataset, the SSTA dataset contains many variables. Let's choose the raw SSTA. If we had included more time steps in our data request, we would need to specify the year. Since we only downloaded data for 1982, however, we don't need to specify the time. Like before, we will also grab lat and lon for our map.
+
+```{r}
+# Get variables from SSTA data
+
+# Get the variable called "SSTA"
+ssta <- ncvar_get(ssta_first, "SSTA")
+
+# Get latitude and longitude ("lat" and "lon")
+lon <- ncvar_get(ssta_first, "lon")
+lat <- ncvar_get(ssta_first, "lat")
+
+
+lat <- rev(lat)
+
+nc_close(ssta_first)
+```
+
+Next, create a raster with the data and plot it.
+
+```{r}
+r <- raster(t(ssta), xmn = min(lon), xmx = max(lon), ymn = min(lat), ymx = max(lat))
+
+plot(r)
+
+```
+
+The colors in this map represent the difference in sea surface temperature at a location to its climatological mean. Because we have so many data points across the world, it is a bit hard to see where the SSTA is above average (0). Let's plot only the points where SSTA > 0.
+
+```{r}
+plot(r > 0)
+
+print(length(which(ssta > 0)))
+```
+
+This gives us an idea for how the sea surface temperature in 1982 differed from the climate normal. Next, let's investigate SSTA for 2019.
+
+```{r}
+
+## FILL IN CODE BELOW ##
+# Get the variable called "SSTA"
+ssta <- ncvar_get()
+
+# Get latitude and longitude ("lat" and "lon")
+lon <- ncvar_get()
+lat <- ncvar_get()
+
+## END OF YOUR CODE ##
+
+lat <- rev(lat)
+
+nc_close(ssta_last)
+```
+
+
+```{r}
+r <- raster(t(ssta), xmn = min(lon), xmx = max(lon), ymn = min(lat), ymx = max(lat))
+
+plot(r) 
+
+```
+
+```{r}
+plot(r > 0)
+
+print(length(which(ssta > 0)))
+```
+
+What do you notice about the graphs we have made? How does SSTA for 1982 differ from SSTA for 2019?
+
+## Where to go from here
+
+Great job creating those plots! I hope you have a better understanding of how scientists store environmental data as well as how to access and explore that data. NOAA's THREDDS server has many more datasets to explore. Find another dataset or variable you're interested in, and explore that as well (one interesting one is [CoRTAD Thermal Stress Anomaly](https://www.ncei.noaa.gov/thredds-ocean/dodsC/cortad/Version6/cortadv6_TSA.nc.html). Another great dataset to accompany your SST metrics study would be a set of coordinates for major coral reef locations (see bonus section).
+
+Although we have created some great maps, we could definitely improve on these. Try adding a nice title and legend to your map, or changing the color scales for SSTA values. If you wanted, you could even try to overlay a world map onto your plot.
+
+## Other NOAA Data
+
+NOAA has petabytes of data available to the public. To find more interesting datasets, explore the [THREDDS server](https://www.ncei.noaa.gov/thredds-ocean/catalog.html) from a browser, check out data [available via cloud providers](https://www.noaa.gov/nodd/datasets), the [NOAA Data Catalog](https://data.noaa.gov/dataset/), or check out some of NOAA's many data portals such as [CoastWatch](https://coastwatch.noaa.gov/cw_html/cwViewer.html).
+
+## Bonus: Coral Reef locations
+
+NOAA's [Deep Sea Coral and Sponge Map Portal](https://www.ncei.noaa.gov/maps/deep-sea-corals/mapSites.htm) contains information on coral and sponge populations around the world. This could be an interesting dataset to pair with our SST data. Here is some code to get you started:
+
+```{r}
+library(readr)
+# Access and download data at https://www.ncei.noaa.gov/maps/deep-sea-corals/mapSites.htm
+# Download the data to your machine and change the path below
+deep_sea_corals <- read_csv("../deep_sea_corals.csv")
+
+deep_sea_corals
+```
+
+```{r}
+plot(r)
+points(deep_sea_corals$longitude, deep_sea_corals$latitude, cex=0.25)
+```
+
+Can you make an interesting plot with these datasets? Try it out below!
+

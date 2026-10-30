@@ -1,0 +1,284 @@
+# Spatial Data Cont'd
+
+**Original author:** Dr. Cassy Dorff
+
+**Original date:** 11/8/2022
+
+> Historical student-facing teaching material. [Editable R Markdown](mod12_spatial_student.Rmd). This is a text preview, not executed output. Code blanks are intentional; see the repository data guide for withheld inputs and external dependencies.
+
+```r
+knitr::opts_chunk$set(echo = TRUE)
+library(sf) # classes and functions for vector data
+library(raster) # classes and functions for raster data
+library(spData) # load geographic data
+library(stars)
+library(gapminder)
+library(mapdata)
+library(devtools)
+library(tidyverse) 
+library(ggmap)
+
+```
+
+
+
+# The Primary tasks of mapping in data science 
+Plotting spatial data is a common visualisation task. Typically our analyses can be decomposed into two problems :1) using one data source to draw a map, and 2) adding data from another information source to the map to provide the relevant information for our plotting task. 
+
+# Polygon maps 
+
+Perhaps the simplest approach to drawing maps is to use `geom_polygon()` to draw boundaries for different regions. For this example we take data from the maps package using `ggplot2::map_data()`. The maps package isn’t always particularly accurate (so make sure you're not really making a mistake before using these maps), but it’s built into R so it’s an easy place for mapping data quickly.  
+
+Polygon maps are typical drawn from data which have the following features:
+
+- Longitude, Latitude, Group, Order, Region, and sometimes a subregion. 
+- Longitude and Latitude are simply well...the longitude and latitude of particular points of the polygon. 
+- Group is a numeric ID for the country/geographic unit
+- Order is the order in which the longitude and latitude points are to be connected to form the polygon (sometimes this information is stored in a single row). 
+-  Region is the country or geographic unit of interest. 
+
+With a polygon map and a data of this structure, ggplot is simply going to connect these series of points to create the world map you see below. 
+
+
+```r
+# loading data for the world map
+world_map <- map_data("world")
+
+# plotting the world map with ggplot. Like always, the dataframe comes first. x = longitude,
+# y = latitude, group is the numerical country ID
+# fill specifies which color to be used internally in the countries, colour specific the border colors
+ggplot(world_map, aes(x = long, y = lat, group = group)) +
+  geom_polygon(fill="lightgray", colour = "white")
+```
+
+We can also subset our world map into specific countries of interest and replot the map. Say we wanted to look just at European Union Countries. 
+
+`theme_void`: the main characteristic of this theme is that it shows only the absolutely relevant plot components. Most of the less necessary metrics and components of the graph are removed.
+
+```r
+  # Some EU Contries for our subset 
+some_eu_countries <- c(
+  "Portugal", "Spain", "France", "Switzerland", "Germany",
+  "Austria", "Belgium", "UK", "Netherlands",
+  "Denmark", "Poland", "Italy", 
+  "Croatia", "Slovenia", "Hungary", "Slovakia",
+  "Czech republic"
+)
+
+# Retrieve the map data, note we're just subsetting when we load the data
+some_eu_maps <- map_data("world", region = some_eu_countries)
+
+# Compute the centroid as the mean longitude and latitude
+# Use as label coordinate for country's names
+region_label_data <- some_eu_maps %>%
+  group_by(region) %>%
+  summarise(long = mean(long), lat = mean(lat))
+
+
+# Make the plot 
+ggplot(some_eu_maps, aes(x = long, y = lat)) +
+  geom_polygon(aes( group = group, fill = region))+
+  geom_text(aes(label = region), data = region_label_data,  size = 3, hjust = 0.5)+
+  scale_fill_viridis_d()+
+  theme_void()+ labs(title="Some European Union Countries") + 
+  theme(legend.position = "none")
+```
+
+Using `ggsave`, can you save the map to a specific location on your machine?
+
+```r
+```   
+
+
+## Displaying new information on a map
+
+So far we've done well with the first task of mapping, which is just to make the map! This usually isn't the end of our visualization task, as maps without new information displayed on them aren't likely something we'll get to do as data scientists. As a result, we often merge or join spatial data with more traditional forms of data or information for plotting purposes. Below, I load the gapminder data that we've used many times in this class. Using left_join I merge this demographic data with spatial data to create a plot of life expectancy in 2007 by country. 
+
+
+```r
+life_exp <- as.data.frame(gapminder)
+life_exp <- life_exp %>% filter(year==2007)
+life_exp$region <- as.character(life_exp$country)
+life_exp$region[life_exp$country=="United States"] <- "USA"
+life_exp$region <- as.factor(life_exp$region)
+
+
+world_map <- map_data("world")
+life_exp_map <- left_join(life_exp, world_map, by = "region")
+
+
+ggplot(life_exp_map, aes(long, lat, group = group))+
+  geom_polygon(aes(fill = lifeExp ), color = "white")+
+  scale_fill_viridis_c(option = "C") + labs(title="Global Life Expectancy",
+                                            fill="Years", x="Latitude", y="Longitude")
+```
+*Students try this* 
+
+1. What is going on with the missing whole in Africa?
+
+```r
+library(naniar) 
+life_exp_check <- life_exp_map %>% 
+  dplyr::filter(continent == "Africa") %>%
+  dplyr::select(lifeExp, country)
+gg_miss_var(life_exp_check, country, show_pct = TRUE) + 
+  ylim(0, 100) 
+
+unique(life_exp_check$country)
+```
+
+2. Can you replicate the code above using one either population (pop) or gdp per capita (gdpPercap) as our demographic variable of interest? 
+
+  
+```r
+```
+
+
+# Create a new map with state-level arrests
+
+The map_data package includes many pre-packaged spatial data frames to be used. For example, here we use state spatial data and merge that data with data on different types of arrests by state. 
+
+*Students try this*
+
+```r
+# Prepare the USArrests data
+arrests <- USArrests 
+
+# change states to all lower case to merge with spatial data
+arrests$region <- tolower(rownames(USArrests))
+head(arrests)
+
+# Retrieve the states map data and merge with crime data
+states_map <- map_data("state")
+arrests_map <- left_join(states_map, arrests, by = "region")
+
+# CAN YOU MAP arrests by states?
+
+
+
+```
+  
+  
+Google Maps
+
+In the previous subsection, we used built-in datasets of geographic data to create the background when mapping point locations. This works well for locations for which map_data datasets exist at the appropriate aggregation level. However, there are only a few countries with data at a sub-country level available through this function. Further, you may want to use a base map that includes elements like roads or terrain.
+
+The ggmap package allows you to do this by using tools from Google Maps directly from R. This package allows you to pull a base map from Google Maps and a few other map servers, which you can then plot and to which you can add points, polygons, lines, and other elements using ggplot2 functions. This package uses the Google Maps API, so you should read their terms of service and make sure you follow them if using this package.
+
+You use the `get_map` function from this package to get base maps for different locations. To tell the function where you would like the map centered, you can either use the longitude and latitude of the center point of the map or you can use a character string to specify a location. This will work well for most cities, and you can also use it with landmarks, but it might fail to geocode less well-known locations. You can use the *zoom* parameter to set the amount the map is zoomed in on that location; this value should be between 3 and 20, with lower values more zoomed out and higher values more zoomed in.
+
+NOTE: To use the `get_map` function and other functions in the ggmap package, you need a working Google Maps API Key. In order to create an API key, you need to: 
+
+1) Create a Google account
+2) Goto the Google Maps Platform Console to create an API key
+3) Enable the Google Maps Static Map API and the Geocoding API for your account
+4) Copy the Google Maps API key into your .Renviron file and store it under the identifier GOOGLEMAPS_API_KEY.
+
+READ ME on this: https://cran.r-project.org/web/packages/ggmap/readme/README.html
+
+
+```r
+# register your google API Key here like this 
+register_google(key = "XXXX")
+
+# load the latest version of ggmap
+# you devtools for this
+devtools::install_github("dkahle/ggmap", force=T)
+
+# pulls in map data for Beijing, China
+beijing <- get_map("Beijing", zoom = 12)
+
+# makes map of Beijing, China 
+ggmap(beijing) + 
+  theme_void() + 
+  ggtitle("Beijing, China")
+
+```
+
+If you find that you’re getting an error like “Error: GeomRasterAnn was built with an incompatible version of ggproto” or "Error in FUN(newX[, i], ...) : 
+  lazy-load database '/Library/Frameworks/R.framework/Versions/3.6/Resources/library/ggmap/R/ggmap.rdb' is corrupt" when you try to use the ggmap package, try reinstalling the package directly from GitHub using install_github("dkahle/ggmap"). The digest and rlang packages also seem to cause problems. So you make want to remove.packages("digest") etc. and then reload ggamp to solve this problem. 
+ 
+The `get_map` function is sending a request and getting a response from the Google API. Therefore, this function will not work if your computer is offline or if your computer is not able to access the Google API. While the default source for maps with `get_map` is Google Maps, you can also use the function to pull maps from OpenStreetMap and Stamen Maps.You can also specify the type of map, which allows you to pull a variety of maps including street maps and terrain maps. You specify where to get the map using the source parameter and what type of map to use with the *maptype* option.
+
+Here are example maps of Austin, TX, my hometown, pulled using different map sources and map types. Also, note that we’ve used the option extent = "device" when calling ggmap, which specifies that the map should fill the whole plot area, instead of leaving room for axis labels and titles. 
+
+
+```r
+# Terrain Map using Google Maps 
+map_1 <- get_map("Austin", zoom = 12,
+                 source = "google", maptype = "terrain") %>%
+  ggmap(extent = "device")
+
+# Watecolor Map using Stamen Maps 
+map_2 <- get_map("Austin", zoom = 12,
+                 source = "stamen", maptype = "watercolor") %>%
+  ggmap(extent = "device")
+
+# Hybrid Map 
+map_3 <- get_map("Austin", zoom = 12,
+                 source = "google", maptype = "hybrid") %>%
+  ggmap(extent = "device")
+
+library(gridExtra)
+# arrange in one grid 
+grid.arrange(map_1, map_2, map_3, nrow = 1) 
+
+
+```
+
+We can also create a map by entering in specific longitude and latitude coordinates. ggmap will center a map on this point. 
+
+```r
+get_map(c(2.35, 48.86), zoom = 10) %>%
+  ggmap(extent = "device")
+
+```
+You can use the ggmap package to do a number of other interesting tasks related to geographic data. For example, the package allows you to use the Google Maps API, through the geocode function, to get the latitude and longitude of specific locations based on character strings of the location or its address. For example, you can get the location of the Supreme Court of the United States by calling:
+
+
+```r
+geocode("Supreme Court of the United States")
+geocode("1 First St NE, Washington, DC")
+
+```
+
+
+*Students do this* 
+Look up the coordinates to your home or a place of interest to you.  How specific and granular can you make the map? 
+
+```r
+```
+
+# Final Example
+
+# Layering with ggmap 
+Like other mapping tasks, we're using interested in more than the map. We want to know about how some data of interest are geographically distributed. Here, we use data in the ggamp package on crime in Houston. 
+
+
+```r
+# load and explore data 
+data(crime)
+names(crime)
+
+# pull road map of Houston from Google API
+hmap <- get_map("houston", zoom = 13,
+                 source = "google", maptype = "roadmap") %>%
+ggmap(extent = "device")
+hmap
+
+# qmap is another syntax within ggmap to make the same plot
+hmap2 <- qmap('houston', zoom = 13)
+ 
+ # subset data to only violent crimes
+violent_crimes <- subset(crime, offense != "auto theft" & offense != "theft" & offense != "burglary")
+
+# factor variable with order violent crimes
+violent_crimes$offense <- factor(violent_crimes$offense, levels = c("robbery", "aggravated assault", "rape", "murder"))
+
+# restrict to downtown area of Houston
+violent_crimes <- subset(violent_crimes, -95.39681 <= lon & lon <= -95.34188 & 29.73631 <= lat & lat <= 29.78400)
+ 
+ 
+# Map Points on Google Map 
+
+```

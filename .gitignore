@@ -1,0 +1,14 @@
+# Private originals and publication checks never belong in this repository.
+.private/
+.env
+.env.*
+.Renviron
+.Rhistory
+.RData
+.Rproj.user/
+.DS_Store
+__pycache__/
+*.aux
+*.log
+*.out
+*.toc

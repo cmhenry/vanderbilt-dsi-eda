@@ -1,0 +1,52 @@
+---
+title: "Data Quickfire 2"
+author: "Dr. Cassy Dorff"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## INSTRUCTIONS 
+
+WORK ALONE.
+OPEN NOTES.
+Submit via your own hw github repo.
+
+At a *minimum*, to achieve a passing score, you need to make:
+  - one single, presentation-worthy graphic using any visualization you want
+  - interpret the graphic using 1-3 complete sentences
+  - AND you must show an *attempt* at a second analysis that uses k-means, text sentiment, or mapping (or a combination of these).
+
+To achieve a high score, you will:
+- complete both tasks above in full
+- present a final graphic for your second analysis.
+
+Extra awesome if you have time to provide a little interpretation for your second analysis.
+
+For this quickfire, you can choose among 3 different datasets and use them however you want (using one or all three). This quickfire is worth 30 points--not a ton of points so try to relax a little and have fun! There are prizes!
+
+## DATA
+
+1. A dataset of votes cast in Florida counties in the 2016 election (`FloridaCountyData.Rds`) 
+2. A dataset of the percentage of votes cast for Democratic and Republican presidential candidates in counties (or towns) for the 2004, 2008, 2012, 2016, and 2020 elections (`CountyVote2004_2020.Rds`).
+3. Trump tweets: (`CountyVote2004_2020.Rds`)
+
+Tips: 
+
+1. I often give you .csv data. Yet this is Rds data. Use the `readRDS` function. For exammple: `dat <- readRDS(file="Trumptweets.Rds")` 
+2. Consider, if you use the `TrumpTweets` data, immediately do some pre-processing and then only use the smaller processed data. 
+
+Example:
+
+```{R}
+trumptweets <- readRDS("Trumptweets.Rds")
+#View(trumptweets)
+glimpse(trumptweets)
+tweets <- trumptweets %>%
+  select(id, content, date, retweets, favorites) %>%
+  mutate(date = ....)
+```
+
